@@ -1,0 +1,21 @@
+---
+documentclass: scrartcl
+title: |
+  Mobile Systeme
+subtitle: |
+  Aufbau einer Internetverbindung durch einen LTE Stick über \
+  ein EPC. \
+  \includegraphics[]{img/lte.pdf}\
+
+author: René Zarwel, Fabian Uhlmann
+
+numbersections: true
+geometry: margin=1in
+
+header-includes: |
+  \usepackage[ngerman]{babel}
+  \usepackage[labelfont=bf]{caption}
+  \usepackage{graphicx}
+---
+
+\tableofcontents
