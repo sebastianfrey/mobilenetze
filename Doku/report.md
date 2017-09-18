@@ -33,7 +33,7 @@ Evolved Packet Core (EPC)
 -------------------------
 
 ### Konfiguration der Hardware/Software
-SW = Ubuntu 14.4_03
+SW = Ubuntu 14.4_03 (Kernel > 4.7.x) wegen GTP Library
 VM
 
 ### OAI Installation
