@@ -1,13 +1,13 @@
 ---
 documentclass: scrartcl
 title: |
-  Mobile Systeme
+  Projekt Mobile Systeme
 subtitle: |
-  Aufbau einer Internetverbindung durch einen LTE Stick über \
-  ein EPC. \
+  Aufbau einer Internetverbindung von einem Huawei LTE-Stick über \
+  die eNodeB bis zur EPC mit Hilfe des OpenAirInterface. \
   \includegraphics[]{img/lte.pdf}\
 
-author: René Zarwel, Fabian Uhlmann
+author: René Zarwel, Fabian Uhlmann, Sebastian Frey, Michael Rödig
 
 numbersections: true
 geometry: margin=1in
