@@ -2,13 +2,13 @@ Abkürzungsverzeichnis
 =====================
 Am Ende Alphabetisch sortieren!
 
-**LTE:** Long Term Evolution  
-**eNodeB:** Evolved Node B  
-**EPC:** Evolved Packet Core  
-**OAI:** Open Air Interface  
-**HSS:** Home Subscriber Server  
-**MME:** Mobility Management Entity  
-**S+P-GW:** Serving Gateway (S-GW) + PDN (Paket Data Network) Gateway (P-GW)  
+**LTE:** Long Term Evolution
+**eNodeB:** Evolved Node B
+**EPC:** Evolved Packet Core
+**OAI:** Open Air Interface
+**HSS:** Home Subscriber Server
+**MME:** Mobility Management Entity
+**S+P-GW:** Serving Gateway (S-GW) + PDN (Paket Data Network) Gateway (P-GW)
 
 Einleitung
 ==========
