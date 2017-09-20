@@ -50,7 +50,43 @@ Ettus SDR (B210)
 Evolved Packet Core (EPC)
 -------------------------
 
-Reihenfolge:
+Der EPC ist das zentrale Element des aufzubauenden LTE-Netzwerkes. Es setzt sich aus den drei Komponenten HSS, MME und SPGW zusammen. Dabei ist es möglich die einzelnen Komponenten des EPC auf verschiedenen Rechnern zu installieren. Im Rahmen dieses Projektes wurden der Einfachheit halber jedoch die EPC Komponenten auf einem Rechner installiert. Die einzelnen Schritte zur Installation und Integration des OAI EPC's werden in den Folgenden Abschnitten erörtert.
+
+### Konfiguration der Hardware/Software
+
+Als Betriebssystem für den EPC empfiehlt das OAI auf seiner Website Ubuntu 16.04 LTS (Xenial Xerus) auf einem dedizierten Rechner. Im Rahmen der Projektausführung wurde der EPC jedoch zuerst auf einer Virtuellen Maschine (VM) mit Ubuntu 14.04 LTS (Trusty Tahr) lauffähig installiert. Aufgrund eines Netzwerkproblems zwischen eNodeB-Rechner und der EPC-VM, wurde im weiteren Projektverlauf der EPC erneut auf einem dedizierten Rechner mit Ubuntu 16.04 LTS installiert. Verursacht wurde das Kommunikationsproblem durch den CiscoAnyConnect-VPN-Client auf dem eNodeB-Rechner, wodurch die beiden Komponenten über das erforderliche SCTP-Protokoll nicht miteinander kommunizieren konnten und sommit ein Zusammenschluss beider Komponenten nicht möglich war.
+
+Nach der Installation von Ubuntu 16.04 auf dem dedizierten Rechner wird zuerst ein Kernelupgrade auf die Version 4.7 durchgeführt. Wichtig beim Upgrade des Kernels ist, dass dieser das GTP (GPRS Transport Protool) Modul beinhaltet. Mit folgenden Kommandos kann der Kernel installiert werden:
+
+```sh
+cd ~/Documents
+git clone https://gitlab.eurecom.fr/oai/linux-4.7.x.git
+cd linux-4.7.x
+sudo dpkg -i linux-headers-4.7.7-oaiepc_4.7.7-oaiepc-10.00.Custom_amd64.deb linux-image-4.7.7-oaiepc_4.7.7-oaiepc-10.00.Custom_amd64.deb
+``` 
+
+Mit dem Befehl `uname -r` lässt sich überprüfen ob die Kernelinstallation erfolgreich war oder nicht. Als Ausgabe in der Kommandzeile sollte hier `4.7.7-oaiepc` oder ähnlich erscheinen.
+
+Im nächsten Schritt gilt es den Hostnamen des Rechners anzupassen. Für den EPC-Rechner wurder der Hostname `hss` gewählt.
+
+```sh
+sudo hostname hss
+```
+
+Außerdem muss die `/etc/hosts`-Datei angepasst werden.
+
+```sh
+nano /etc/hosts
+
+127.0.0.1    localhost
+127.0.1.1    hss.openair4G.eur    hss
+
+```
+
+### OAI Installation
+
+TODO ausformulieren
+
 - Git Repositories openair-cn auschecken (Wichtig develop branch)
 - Kernel > 4.7.x oai
 - hostname und etc/hosts konfigurieren
@@ -59,12 +95,6 @@ Reihenfolge:
 - installieren von hss,mme,spgw
 - in mmeidentity-Tabelle epc hostnamen 'hss.openair4G.eur' eintragen, Achtung ID merken
 - in users und pdn sim karte eintragen, außerdem in mmeidentity-Spalte (Fremdschlüssel auf mmeidentity-Tabelle) eintragen
-
-### Konfiguration der Hardware/Software
-SW = Ubuntu 14.4_03 (Kernel > 4.7.x) wegen GTP Library
-VM
-
-### OAI Installation
 
 ### Konfiguration von HSS, MME und S+P-GW
 
