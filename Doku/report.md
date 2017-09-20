@@ -6,9 +6,9 @@ Am Ende Alphabetisch sortieren!
 **eNodeB:** Evolved Node B  
 **EPC:** Evolved Packet Core  
 **OAI:** Open Air Interface  
-**HSS: ** Home Subscriber Server  
-**MME: ** Mobility Management Entity  
-**S+P-GW: ** Serving Gateway (S-GW) + PDN (Paket Data Network) Gateway (P-GW)  
+**HSS:** Home Subscriber Server  
+**MME:** Mobility Management Entity  
+**S+P-GW:** Serving Gateway (S-GW) + PDN (Paket Data Network) Gateway (P-GW)  
 
 Einleitung
 ==========
@@ -20,7 +20,8 @@ Das Projekt befasst sich mit dem experimentellen Aufbau eines LTE-Netzwerks und 
 Im Kern ist das Projekt in die folgenden drei Stufen unterteilt:
 - Stufe 1: Aufbau einer durchgehenden Verbindung von einem LTE-Stick über die eNodeB bis zur EPC (mit den Komponenten HSS, MME und S+P-GW) mit Hilfe des OpenAirInterface.
 - Stufe 2: Erweiterung der Verbindung durch Anschluss an das Internet.
-- Stufe 3: Evaluierung der Performance bzw. genauere Untersuchungen auf Protokollebene mit Wireshark.  
+- Stufe 3: Evaluierung der Performance bzw. genauere Untersuchungen auf Protokollebene mit Wireshark. 
+
 Stufe 1 umfasst dabei die Minimalanforderungen an das Projekt. Die Stufen 2 und 3 sind entsprechende Erweiterungen der Mindestumsetzung.
 Der experimentelle Aufbau soll am Ende die Möglichkeit bieten, ein LTE-Netzwerk und dessen Zusammenhänge genauer zu untersuchen um ein Verständnis für die Performance sowie die internen Abläufe der einzelnen Netzwerkkomponenten zu bekommen.
 
