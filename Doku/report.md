@@ -12,6 +12,8 @@ Am Ende Alphabetisch sortieren!
 **3GPP:** 3rd Generation Partnership Project  
 **SDR:** Software Defined Radio  
 **EUTRAN:** Evolved UMTS Terrestrial Radio Access  
+**UMTS:** Universal Mobile Telecommunications System  
+**OFDM:** Orthogonal Frequency Division Multiplexing  
 
 Einleitung
 ==========
@@ -30,6 +32,25 @@ Der experimentelle Aufbau soll am Ende die Möglichkeit bieten, ein LTE-Netzwerk
 
 Relevante Grundlagen zu LTE
 ---------------------------
+Der LTE (Long Term Evolution) Standard ist eine Weiterentwicklung von UMTS (Universal Mobile Telecommunications System) und wurde als erste Version in 3GPP Release 8 spezifiziert [5]. Mit 3GPP Release 10 (LTE Advanced) wurden zudem Erweiterungen spezifiziert, um das System noch schneller und effizienter zu machen.
+
+Zu den wichtigsten Neuerungen von LTE gegenüber UMTS gehört zum einen ein neues Übertragungsverfahren und zum anderen der Fokus auf das paketvermittelnde Internet-Protokoll (IP). LTE verwendet das Übertragungsverfahren Orthogonal Frequency Division Multiplexing (OFDM), dass einen schnellen Datenstrom in viele langsamere Datenströme aufteilt und diese dann gleichzeitig überträgt. Dies führt zu einer erhöhten Datenrate unter LTE. „Während UMTS noch ein leitungsvermittelndes Kernnetz für Sprache-, SMS und andere Dienste hatte, gibt es in LTE nur noch ein paketvermittelndes Kernnetz, über das alle Dienste abgewickelt werden. Einzige Ausnahme ist der SMS-Dienst, der nach wie vor über Signalisierungsnachrichten abgewickelt wird.“ ([1], S. 231 ff.)
+
+Die LTE-Netzwerk-Architektur ist wie bei GSM und UMTS grob in ein Radionetz und ein Kernnetz unterteilt. Unter LTE wurde aber der Anteil logischer Komponenten reduziert, um die Effizienz zu steigern, Kosten zu senken und die Latenzzeiten zu minimieren.  
+Abbildung 1 zeigt alle Komponenten eines LTE-Netzwerks von den mobilen Endgeräten (UEs) bis ins Internet. Die Basisstationen (eNodeBs) bilden zusammen mit den UEs das oben bereits erwähnte Radionetz. Das Kernnetz besteht aus einer Teilnehmerdatenbank (HSS), dem Serving Gateway (Serving-GW), dem Paket Data Network Gateway (PDN-GW) sowie der Benutzerverwaltung (MME). Die MME ist der Netzwerkknoten, der für die Signalisierung zwischen den eNodeBs und dem Kernnetzwerk verantwortlich ist. Das Serving-GW ist verantwortlich für die Weiterleitung von Nutzerdaten in IP-Tunneln zwischen den eNodeBs und dem PDN-Gateway. Das PDN-Gateway bildet am Ende den Übergang zum Internet.
+
+![LTE-Netzwerk im Überblick ([1], S. 234)]{img/LTE-Netzwerk_im_Überblick.pdf}
+
+Verbunden sind alle Komponenten über die in Abbildung 1 gezeigten Schnittstellen, die nachfolgend aufgelistet und kurz beschrieben werden ([1], S. 234 ff.):
+- S6a: Schnittstelle für den Informationsaustausch zwischen HSS und MME über das IP-basierte DIAMETER-Protokoll.
+- S1: Schnittstelle zwischen den Basisstationen und dem Kernnetz.
+  - S1-CP: Steuerebene (Control Plane) für die Kommunikation der eNodeBs mit dem Kernnetz (um sich beim Netzwerk anzumelden, um Status- und Keep-Alive-Nachrichten zu senden, um Konfigurationsinformationen vom Netzwerk zu erhalten) sowie dem Austausch benutzerspezifischer Signalisierung.
+  - S1-UP: Nutzerebene (User Plane) zur Übertragung der Nutzdaten über das GPRS Tunneling Protocol (GTP).
+- S11: Schnittstelle für die Übertragung von Kommandos der MME zum S-GW, über das GPRS Tunneling Protocol (GTP), wenn die MME neue Tunnel und deren Modifikation erstellt. Dies wird immer dann notwendig, wenn eine neue eNodeB von einer anderen MME und einem anderen S-GW bedient wird.
+- S5: Schnittstelle zwischen dem SGW und dem PGW
+  - S5-CP: Control Plane, über die die MME über das PGW eine IP-Adresse für ein Endgerät anfordert.
+  - S5-UP: User Plane, zur Übertragung von Nutzdaten zwischen SGW und PGW über das GPRS Tunneling Protocol (GTP).
+- SGi: Schnittstelle ins Internet.
 
 OpenAirInterface (OAI)
 ----------------------
@@ -146,7 +167,8 @@ Quellenverzeichnis
 [1] M. Sauter, Grundkurs Mobile Kommunikationssysteme, Springer Fachmedien, Wiesbaden, 2015  
 [2] Homepage von OpenAirInterface: <http://www.openairinterface.org/?page_id=864>, Stand: 21.09.2017  
 [3] OAI Tutorials: <https://gitlab.eurecom.fr/oai/openairinterface5g/wikis/OpenAirUsage>, Stand: 21.09.2017  
-[4] OAI Mailing-Lists: <https://gitlab.eurecom.fr/oai/openairinterface5g/wikis/MailingList>, Stand: 21.09.2017  
+[4] OAI Mailing-Lists: <https://gitlab.eurecom.fr/oai/openairinterface5g/wikis/MailingList>, Stand: 21.09.2017 
+[5] 3GPP Release 8: < http://www.3gpp.org/specifications/releases/72-release-8>, Stand 21.09.2017  
 
 Anhang
 ======
