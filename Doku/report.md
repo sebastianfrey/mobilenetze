@@ -161,6 +161,19 @@ Latenz
 
 Fazit und Ausblick
 ==================
+Was haben wir im Verlauf des Projekts gelernt:
+- Verständnis, wie zellulare Mobilfunknetze funktionieren und wie sich Daten dort übertragen lassen
+
+Umsetzungsstand:  
+| Stufe | Umsetzungsgrad | dabei aufgetretene Probleme |
+| :---- | :------------: | --------------------------: |
+| 1     |                |                             |
+| 2     |                |                             |
+| 2     |                |                             |
+
+Wie kann das vorliegende Projekt zukünftig genutzt/weiter verwendet bzw. erweitert werden?
+
+Ausblick bezüglich des OpenAirInterface (siehe 5G)
 
 Quellenverzeichnis
 ==================
