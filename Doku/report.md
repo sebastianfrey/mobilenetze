@@ -164,12 +164,13 @@ Fazit und Ausblick
 Was haben wir im Verlauf des Projekts gelernt:
 - Verständnis, wie zellulare Mobilfunknetze funktionieren und wie sich Daten dort übertragen lassen
 
-Umsetzungsstand:  
+Umsetzungsstand:
+
 | Stufe | Umsetzungsgrad | dabei aufgetretene Probleme |
 | :---- | :------------: | --------------------------: |
 | 1     |                |                             |
 | 2     |                |                             |
-| 2     |                |                             |
+| 3     |                |                             |
 
 Wie kann das vorliegende Projekt zukünftig genutzt/weiter verwendet bzw. erweitert werden?
 
