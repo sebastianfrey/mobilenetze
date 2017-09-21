@@ -8,8 +8,8 @@ Am Ende Alphabetisch sortieren!
 **OAI:** Open Air Interface  
 **HSS:** Home Subscriber Server  
 **MME:** Mobility Management Entity  
-**S+P-GW:** Serving Gateway (S-GW) + PDN (Paket Data Network) Gateway (P-GW)
-**3GPP:** 3rd Generation Partnership Project  
+**S+P-GW:** Serving Gateway (S-GW) + PDN (Paket Data Network) Gateway (P-GW)  
+**3GPP:** 3rd Generation Partnership Project  
 **SDR:** Software Defined Radio  
 **EUTRAN:** Evolved UMTS Terrestrial Radio Access  
 
