@@ -14,6 +14,7 @@ Am Ende Alphabetisch sortieren!
 **EUTRAN:** Evolved UMTS Terrestrial Radio Access  
 **UMTS:** Universal Mobile Telecommunications System  
 **OFDM:** Orthogonal Frequency Division Multiplexing  
+**UE:** User Equipment
 
 Einleitung
 ==========
@@ -64,6 +65,9 @@ Des Weiteren ist zu erwähnen, dass für die Erstellung der LTE-Netzwerknachbild
 
 Versuchsaufbau
 --------------
+Der in diesem Projekt verwendete Versuchsaufbau ist der untenstehenden Abbildung 3 zu entnehmen. Er besteht aus vier zentralen Komponenten, die nachfolgend kurz beschrieben werden. Das mobile Endgerät, sprich die UE, besteht aus einem Huawei LTE-Stick (E3372), welcher mit der Basisstation (eNodeB) verbunden ist. Die eNodeB wird durch das OAI abgebildet und läuft auf einem physikalischen PC. Da im Umfeld dieses Projekts nicht gefunkt werden darf, ist die Verbindung vom UE zur eNodeB kabelgebunden. Dafür wird neben einem Softwere Defined Radio (USRP B210) auch ein LTE Band7 Duplexer sowie entsprechende Dämpfungsglieder zwischengeschalten. Die EPC, bestehend aus der MME, der HSS und dem S+P-GW, wird ebenfalls durch das OAI abgebildet und läuft auf einem zweiten physischen PC. Die vierte und letzte Komponente stellt dann noch das Internet dar, mit dem sich am Ende der LTE-Stick über die eNodeB und den EPC verbinden soll.
+
+![Versuchsaufbau]{img/Versuchsaufbau.pdf}
 
 Aufsetzen der Projektumgebung
 =============================
