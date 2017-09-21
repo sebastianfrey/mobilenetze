@@ -2,13 +2,16 @@ Abkürzungsverzeichnis
 =====================
 Am Ende Alphabetisch sortieren!
 
-**LTE:** Long Term Evolution
-**eNodeB:** Evolved Node B
-**EPC:** Evolved Packet Core
-**OAI:** Open Air Interface
-**HSS:** Home Subscriber Server
-**MME:** Mobility Management Entity
+**LTE:** Long Term Evolution  
+**eNodeB/eNB:** Evolved Node B  
+**EPC:** Evolved Packet Core  
+**OAI:** Open Air Interface  
+**HSS:** Home Subscriber Server  
+**MME:** Mobility Management Entity  
 **S+P-GW:** Serving Gateway (S-GW) + PDN (Paket Data Network) Gateway (P-GW)
+**3GPP:** 3rd Generation Partnership Project  
+**SDR:** Software Defined Radio  
+**EUTRAN:** Evolved UMTS Terrestrial Radio Access  
 
 Einleitung
 ==========
@@ -133,6 +136,10 @@ Fazit und Ausblick
 
 Quellenverzeichnis
 ==================
+[1] M. Sauter, Grundkurs Mobile Kommunikationssysteme, Springer Fachmedien, Wiesbaden, 2015  
+[2] Homepage von OpenAirInterface: <http://www.openairinterface.org/?page_id=864>, Stand: 21.09.2017  
+[3] OAI Tutorials: <https://gitlab.eurecom.fr/oai/openairinterface5g/wikis/OpenAirUsage>, Stand: 21.09.2017  
+[4] OAI Mailing-Lists: <https://gitlab.eurecom.fr/oai/openairinterface5g/wikis/MailingList>, Stand: 21.09.2017  
 
 Anhang
 ======
