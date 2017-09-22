@@ -1,1 +1,35 @@
+Damit der LTE-Dongle das LTE-Netz auf Band 7 sieht, muss das lte-softmodem "gezwungen" werden die GPS-Uhr
+für die Synchronisierung zu verwenden. Dazu muss der C-Code der Datei ./targets/ARCH/USRP/USERSPACE/LIB/usrp_lib.cpp ab Zeile 
+750 angepasst werden (Quelle: https://lists.eurecom.fr/sympa/arc/openair5g-user/2017-08/msg00203.html).
+
+
+	    bool has_gpsdo = false;
+
+	    std::vector<std::string> mboard_sensors = s->usrp->get_mboard_sensor_names();
+
+            for (int i = 0; i < mboard_sensors.size(); i++)
+            {
+                if(mboard_sensors[i] == "gps_locked") {
+
+		    has_gpsdo = true; //Do not care about lock state of the GPS sensor, just that it’s there
+                }
+            }
+
+            // lock mboard clocks
+            if (openair0_cfg[0].clock_source == internal){
+		if(has_gpsdo){
+
+			s->usrp->set_clock_source("gpsdo");
+		}
+		else {
+		        s->usrp->set_clock_source("internal");
+		}
+            }
+            else{
+                s->usrp->set_clock_source("external");
+		s->usrp->set_time_source("external");
+            }
+            LOG_I(PHY,"Clock source set to: %s…\n",s->usrp->get_clock_source(0).c_str());
+
+
 
