@@ -43,3 +43,5 @@ angepasst werden (Quelle: https://gitlab.eurecom.fr/oai/openair-cn/commit/0d5749
 
 
 Für eine erfolgreiche Authentifizierung muss in der Spalte access_restriction der Wert 47 eingetragen werden. Standardwert ist 60.
+
+Die Huawei LTE Sticks funktionieren nur an USB 2.0 Schnittstellen 100%ig.
