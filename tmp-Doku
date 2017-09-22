@@ -40,8 +40,11 @@ angepasst werden (Quelle: https://gitlab.eurecom.fr/oai/openair-cn/commit/0d5749
 #define IMSI_64_FMT              "%015"SCNu64
 
 
-
-
 Für eine erfolgreiche Authentifizierung muss in der Spalte access_restriction der Wert 47 eingetragen werden. Standardwert ist 60.
 
 Die Huawei LTE Sticks funktionieren nur an USB 2.0 Schnittstellen 100%ig.
+
+Der Cisco AnyConnectClient verändert das Routing zwischen EPC und eNodeB. Deshalb erstmal nur Verbindung in LRZ-Netz möglich.
+
+Außerdem in spgw.conf UE_TCP_MMS_CLAMPING und PGW_MASQUERADE_SGI auf yes setzen / aktiviern.
+
