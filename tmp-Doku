@@ -42,6 +42,4 @@ angepasst werden (Quelle: https://gitlab.eurecom.fr/oai/openair-cn/commit/0d5749
 
 
 
-
-
-https://gitlab.eurecom.fr/oai/openair-cn/commit/0d574905cbdedd30fdba7f6e3062db268761f0b7
+Für eine erfolgreiche Authentifizierung muss in der Spalte access_restriction der Wert 47 eingetragen werden. Standardwert ist 60.
