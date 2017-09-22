@@ -33,3 +33,15 @@ für die Synchronisierung zu verwenden. Dazu muss der C-Code der Datei ./targets
 
 
 
+EPC: Damit das EPC IMISI's mit zwei führenden Nullen zulässt muss unter ./src/common/ die Datei common_types.h in ca. Zeile 88
+angepasst werden (Quelle: https://gitlab.eurecom.fr/oai/openair-cn/commit/0d574905cbdedd30fdba7f6e3062db268761f0b7):
+
+#define IMSI_64_FMT              "%"SCNu64
+#define IMSI_64_FMT              "%015"SCNu64
+
+
+
+
+
+
+https://gitlab.eurecom.fr/oai/openair-cn/commit/0d574905cbdedd30fdba7f6e3062db268761f0b7
