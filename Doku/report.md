@@ -166,6 +166,13 @@ Latenz
 Signalisierung (Fabian)
 ==========
 
+Authentifizierung
+----------
+
+An- und Abmeldung (Attach/Deattach)
+----------
+
+
 Fazit und Ausblick (Michael)
 ==================
 Was haben wir im Verlauf des Projekts gelernt:
