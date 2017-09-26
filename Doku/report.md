@@ -16,7 +16,7 @@ Am Ende Alphabetisch sortieren!
 **OFDM:** Orthogonal Frequency Division Multiplexing  
 **UE:** User Equipment
 
-Einleitung
+Einleitung (Michael)
 ==========
 Die vorliegende Projektdokumentation ist Teil der Veranstaltung „Mobile Netze“ an der Fakultät für Informatik und Mathematik (FK 07) der Hochschule München im Sommersemester 2017. Das Projekt dient der Vertiefung der in dem Vorlesungsanteil erworbenen Kenntnisse und Fähigkeiten durch praktisches Experimentieren mit mobiler Kommunikation. Im Fall dieses Projekts, geht es um das Verständnis für die grundlegenden Prinzipien von LTE-Netzwerken, sowie die Kenntnis und praktische Erfahrungen mit dort verwendeten Techniken und Standards.
 
@@ -72,7 +72,7 @@ Der in diesem Projekt verwendete Versuchsaufbau ist der untenstehenden Abbildung
 Aufsetzen der Projektumgebung
 =============================
 
-Evolved Node B (eNodeB)
+Evolved Node B (eNodeB) (René)
 -----------------------
 
 ### Konfiguration der Hardware/Software
@@ -82,7 +82,7 @@ Ettus SDR (B210)
 
 ### OAI Installation
 
-Evolved Packet Core (EPC)
+Evolved Packet Core (EPC) (Sebastian)
 -------------------------
 
 Der EPC ist das zentrale Element des aufzubauenden LTE-Netzwerkes. Es setzt sich aus den drei Komponenten HSS, MME und SPGW zusammen. Dabei ist es möglich die einzelnen Komponenten des EPC auf verschiedenen Rechnern zu installieren. Im Rahmen dieses Projektes wurden der Einfachheit halber jedoch die EPC Komponenten auf einem Rechner installiert. Die einzelnen Schritte zur Installation und Integration des OAI EPC's werden in den Folgenden Abschnitten erörtert.
@@ -133,7 +133,7 @@ TODO ausformulieren
 
 ### Konfiguration von HSS, MME und S+P-GW
 
-User Equipment (UE)
+User Equipment (UE) (Fabian)
 -------------------
 Huawei LTE-Stick
 
@@ -141,10 +141,10 @@ Aufbau der Projektumgebung
 --------------------------
 LTE- Stick, eNB + EPC
 
-Herstellen einer Internetverbindung
+Herstellen einer Internetverbindung (René)
 ===================================
 
-Evaluation
+Performance (Sebastian)
 ==========
 
 Datenrate
@@ -163,7 +163,10 @@ Latenz
 
 ### Evaluierung der Messdaten
 
-Fazit und Ausblick
+Signalisierung (Fabian)
+==========
+
+Fazit und Ausblick (Michael)
 ==================
 Was haben wir im Verlauf des Projekts gelernt:
 - Verständnis, wie zellulare Mobilfunknetze funktionieren und wie sich Daten dort übertragen lassen
