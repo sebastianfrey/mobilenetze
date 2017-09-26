@@ -1,5 +1,6 @@
 ---
-documentclass: scrartcl
+documentclass: scrbook
+classoption: titlepage=firstiscover,BCOR=15mm
 title: |
   Projekt Mobile Systeme
 subtitle: |
@@ -11,11 +12,14 @@ author: René Zarwel, Fabian Uhlmann, Sebastian Frey, Michael Rödig
 
 numbersections: true
 geometry: margin=1in
+bibliography: bibliography.bib
+csl: iso690-author-date-en.csl
 
 header-includes: |
   \usepackage[ngerman]{babel}
   \usepackage[labelfont=bf]{caption}
   \usepackage{graphicx}
+  \KOMAoptions{open=any}
 ---
 
 \tableofcontents
