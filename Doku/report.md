@@ -89,9 +89,11 @@ Der EPC ist das zentrale Element des aufzubauenden LTE-Netzwerkes. Es setzt sich
 
 ### Konfiguration der Hardware/Software
 
-Als Betriebssystem für den EPC empfiehlt das OAI auf seiner Website Ubuntu 16.04 LTS (Xenial Xerus) auf einem dedizierten Rechner. Im Rahmen der Projektausführung wurde der EPC jedoch zuerst auf einer Virtuellen Maschine (VM) mit Ubuntu 14.04 LTS (Trusty Tahr) lauffähig installiert. Aufgrund eines Netzwerkproblems zwischen eNodeB-Rechner und der EPC-VM, wurde im weiteren Projektverlauf der EPC erneut auf einem dedizierten Rechner mit Ubuntu 16.04 LTS installiert. Verursacht wurde das Kommunikationsproblem durch den CiscoAnyConnect-VPN-Client auf dem eNodeB-Rechner, wodurch die beiden Komponenten über das erforderliche SCTP-Protokoll nicht miteinander kommunizieren konnten und sommit ein Zusammenschluss beider Komponenten nicht möglich war.
+Als Betriebssystem für den EPC empfiehlt das OAI auf seiner Website Ubuntu 16.04 LTS (Xenial Xerus) auf einem physischen Rechner. Im Rahmen der Projektausführung wurde der EPC jedoch zuerst auf einer Virtuellen Maschine (VM) mit Ubuntu 14.04 LTS (Trusty Tahr) lauffähig installiert. Aufgrund eines Netzwerkproblems zwischen eNodeB-Rechner und der EPC-VM, wurde im weiteren Projektverlauf der EPC erneut auf einem physischen Rechner mit Ubuntu 16.04 LTS installiert. Verursacht wurde das Kommunikationsproblem durch den CiscoAnyConnect-VPN-Client auf dem eNodeB-Rechner, wodurch die beiden Komponenten nicht über das für die Signalisierung verwendete SCTP-Protokoll miteinander kommunizieren konnten. Dadurch war das Zusammenschließen von eNodeB und EPC nicht möglich.
 
-Nach der Installation von Ubuntu 16.04 auf dem dedizierten Rechner wird zuerst ein Kernelupgrade auf die Version 4.7 durchgeführt. Wichtig beim Upgrade des Kernels ist, dass dieser das GTP (GPRS Transport Protool) Modul beinhaltet. Mit folgenden Kommandos kann der Kernel installiert werden:
+Nach der Installation von Ubuntu 16.04 auf dem physischen Rechner sollte zuerst zuerst ein Kernelupgrade auf die Version 4.7 oder größer durchgeführt werden. Wichtig beim Kernelupgrade ist, dass dieser das GTP (GPRS Transport Protool) Modul beinhaltet. Auf `gitlab.eurocom.fr` stellt das OAI ein optimiertes Kernelpacket, welches das GTP-Modul enthält, zum Download bereit. Im Rahmen des Projektes wurde der zum Zeitpunkt der Projektdurchführung aktuelle Master-Branch des OAI Git-Repositories verwendet.
+
+Der Kernel wurde dann mit Folgenden Kommandos installiert:
 
 ```sh
 cd ~/Documents
@@ -102,23 +104,63 @@ sudo dpkg -i linux-headers-4.7.7-oaiepc_4.7.7-oaiepc-10.00.Custom_amd64.deb linu
 
 Mit dem Befehl `uname -r` lässt sich überprüfen ob die Kernelinstallation erfolgreich war oder nicht. Als Ausgabe in der Kommandzeile sollte hier `4.7.7-oaiepc` oder ähnlich erscheinen.
 
-Im nächsten Schritt gilt es den Hostnamen des Rechners anzupassen. Für den EPC-Rechner wurder der Hostname `hss` gewählt.
+Im nächsten Schritt gilt es den Hostnamen des Rechners anzupassen. Für den EPC-Rechner wurder der Hostname `hss` gewählt. Prinzipiell kann für den EPC-Rechner jeder beliebige Hostname verwendet werden. Im weiteren Verlauf dieses Dokuments wird jedoch angenommen, dass der Hostname des EPC-Rechners `hss` lautet.
+
+Zuerst wird der Hostname mit nachfolgendem Befehl neu gesetzt.
 
 ```sh
 sudo hostname hss
 ```
 
-Außerdem muss die `/etc/hosts`-Datei angepasst werden.
+Anschließend muss noch die `/etc/hosts`-Datei angepasst werden. Wie schon beim Hostnamen kann das Realm beliebig gewählt werden. Im weiteren Verlauf dieses Dokuments wird jedoch ebenfalls angenommen, dass der Real des EPC-Rechners `openair4G.eur` lautet.
 
 ```sh
-nano /etc/hosts
+sudo nano /etc/hosts
 
 127.0.0.1    localhost
 127.0.1.1    hss.openair4G.eur    hss
 
 ```
 
+Nachdem dem Kernelupdate und dem Anpassen des Hostnames sowie der Hosts-Konfiguration, empfiehlt es sich den Rechner neu zu starten und die vorher getätigten Anpassungen noch einmal zu überprüfen. So kann es eventuell passieren, dass während dem Bootvorgang ein anderer Kernel als der zuvor installierte geladen wird. Dies lässt sich beheben in dem man beim Bootvorgang den korrekten Kernel manuell wählt. Damit nicht bei jedem Neustart des EPC-Rechners der Kernel manuell gewählt werden muss, empfiehlt es sich in der  `/etc/default/grub` Konfigurationsdatei den `GRUB_DEFAULT` Wert anzupassen. Null bedeutet, dass der Default Kernel geladen wird. Entweder setzt man den `GRUB_DEFAULT` Wert auf den Index des beim Bootvorgang gewünschten Kernels oder man gibt hier den vollen Namen des Kernels wie er im Grub-Menü angezeigt wird an. Vorsicht vor Tippfehlern, denn die können dazu führen, dass der Rechner unter Umständen nicht mehr korrekt bootet.
+
 ### OAI Installation
+
+Im Vorherigen Abschnitt wurde beschrieben, wie ein Rechner für die Installation des OAI-EPCs vorbreitet werden muss. Im nachfolgendem Abschnitt wird angenommen, dass die Installation und Vorbereitung des Rechners nach der Anleitung im vorherigen Abschnitt durchgeführt wurde.
+
+Zuerst muss man den Sourcecode für das EPC auschecken.
+
+```bash
+git clone https://gitlab.eurecom.fr/oai/openair-cn.git
+```
+
+Nach erfoglreichem Download wechselt man in das Verzeichnis `openair-cn`, wechselt in den Developbranch und aktualisiert diesen.
+
+```bash
+cd openair-cn
+git checkout develop
+git pull
+```
+
+Mit `git status` lässt sich überprüfen ob man tatsächlich auf dem aktuellsten Stand ist. Anschließend wechselt man in das `script`-Verzeichnis und installiert nacheinander die einzelnen Komponenten des EPC, die da wären:
+
+- MME
+- HSS
+- S+P-GW
+
+Die Befehle zum Installieren der Komponenten sollten der Reihe nach und einzeln ausgeführt werden.
+
+```bash
+./build_mme -i
+./build_hss -i
+./build_spgw -i
+```
+
+Während dem Installationsvorgang der einzelnen Komponenten werden zusätzliche System Abhängigkeiten installiert. Hierbei muss man interaktiv die Installation verschiedener Pakete zulassen. Des Weiteren wird ein MySQL-Server, sofern nicht vorhanden, und phpMyAdmin als Datenbanktool installiert und eingerichtet. Ein Stolperstein bei der Installation von phpMyAdmin ist die korrekte Auswahl des Webservers im Installationsmenü vorzunehmen. Hier sollte darauf geachtet werden, dass der gewünschte Webserver für die Ausführung von phpMyAdmin durch ein vorangestellten roten Punkt gekennzeichnet ist.
+
+Nach erfolgreicher Installation von MME, HSS und S+P-GW kann noch überprüft werden ob der MySQL-Server und phpMyAdmin auf dem EPC-Rechner korrekt installiert wurden. Dazu navigiert man im Browser auf `http://localhost/phpmyadmin`.
+
+### Konfiguration von HSS, MME und S+P-GW
 
 TODO ausformulieren
 
@@ -130,8 +172,6 @@ TODO ausformulieren
 - installieren von hss,mme,spgw
 - in mmeidentity-Tabelle epc hostnamen 'hss.openair4G.eur' eintragen, Achtung ID merken
 - in users und pdn sim karte eintragen, außerdem in mmeidentity-Spalte (Fremdschlüssel auf mmeidentity-Tabelle) eintragen
-
-### Konfiguration von HSS, MME und S+P-GW
 
 User Equipment (UE) (Fabian)
 -------------------
