@@ -15,6 +15,8 @@ Am Ende Alphabetisch sortieren!
 **UMTS:** Universal Mobile Telecommunications System  
 **OFDM:** Orthogonal Frequency Division Multiplexing  
 **UE:** User Equipment
+**GUMMEI:** Globally Unique Mobile Management Entity Identifer
+**TAI:** Tracking Area Identity
 
 Einleitung (Michael)
 ==========
@@ -162,6 +164,38 @@ Nach erfolgreicher Installation von MME, HSS und S+P-GW kann noch überprüft we
 
 ### Konfiguration von HSS, MME und S+P-GW
 
+Da nun MME, HSS und S+P-GW erfolgreich installiert wurden, müsse die Konfigurationsdateien zu jeder Komponente angepasst werden. Dazu muss man die Standardtemplates der einzelnen Konfigurationen nach `/usr/local/etc/oai` kopieren. Außerdem muss das Verzeichnis `/usr/local/etc/oai/freeDiameter` erstellt werden.
+
+Zum Kopieren der Konfigurationsdateien kann man Folgende Befehel verwenden:
+
+```bash
+sudo cp ~/openair-cn/etc/mme.conf /usr/local/etc/oai
+sudo cp ~/openair-cn/etc/hss.conf /usr/local/etc/oai
+sudo cp ~/openair-cn/etc/spgw.conf /usr/local/etc/oai
+sudo cp ~/openair-cn/etc/acl.conf /usr/local/etc/oai/freeDiameter
+sudo cp ~/openair-cn/etc/mme_fd.conf /usr/local/etc/oai/freeDiameter
+sudo cp ~/openair-cn/etc/hss_fd.conf /usr/local/etc/oai/freeDiameter
+``` 
+
+Zunächst wird die Konfiguration der MME  `/usr/local/etc/oai/mme.conf`. Der Einfachheit halber werden die einzelenen Konfigurationsparameter in tabellarischer Form aufgelistet. Es werden zudem nur die im Rahmen dieses Projektes angepassten Konfigurationsparameter aufgelistet.
+
+| Eigenschaft | Bedeutung  |
+|-------------------------------|------------------------------------------------------|
+| REALM | Definiert den Domainbereich unter dem MME, HSS und S+P-GW ansprechbar sind. Wenn bei der Konfiguration des Hosts ein anderes Realm als `openair4G.eur` verwendet wurde, muss dieser Parameter entsprechend angepasst werden. |
+| GUMMEI_LIST | Konfiguriert die von der MME zur Verfügung gestellten GUMMEIs. Im Rahmen der Projektdurchführung wurden ein MCC von `001` und ein MNC von `93` verwendet. |
+| TAI_LIST | Konfiguriert den TAI der MME. Für den MCC und den MNC in der TAI_LIST wurden die selben Werte wie für dei GUMMEI_LIST verwendet. |
+| MME_INTERFACE_NAME_ FOR_S1_MME | Konfiguriert das für die S1-Signalisierung zu Verwendende Interface Hier muss das Netzwerkinterface eingetragen werden, über das die eNB erreicht werden kann. |
+| MME_IPV4_ADDRESS_ FOR_S1_MME | Definiert unter welcher IP-Adresse und Subnetzmaske die MME auf S1-Signalisierungsnachrichten reagiert. Unter Umständen muss hier die Subnetzmaske angepasst werden, sofern sich das Netzwerkgateway ändern sollte.
+
+Als nächstes wird die Konfiguration der MME für das Diameter Protokoll unter `/usr/local/etc/oai/mme_fd.conf` angepasst.
+
+| Eigenschaft | Bedeutung |
+|-------------------------------|------------------------------------------------------|
+| Identity | Der Hostname unter dem die MME erreichbar ist. Dieser wurde von `yang.openair4G.eur` zu `hss.openair4G.eur` geändert.
+| Realm | Wie schon in der mme.conf, muss der Domainbreich nur angepasst werden, wenn nicht der Standard Domainbereich `openair4G.eur` verwendet wurde.
+
+
+
 TODO ausformulieren
 
 - Git Repositories openair-cn auschecken (Wichtig develop branch)
@@ -172,6 +206,10 @@ TODO ausformulieren
 - installieren von hss,mme,spgw
 - in mmeidentity-Tabelle epc hostnamen 'hss.openair4G.eur' eintragen, Achtung ID merken
 - in users und pdn sim karte eintragen, außerdem in mmeidentity-Spalte (Fremdschlüssel auf mmeidentity-Tabelle) eintragen
+
+
+### Betrieb von HSS, MME und S+P-GW
+
 
 User Equipment (UE) (Fabian)
 -------------------
