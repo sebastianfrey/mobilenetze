@@ -11,6 +11,7 @@ Abkürzungsverzeichnis
 **OAI:** Open Air Interface  
 **OFDM:** Orthogonal Frequency Division Multiplexing  
 **SDR:** Software Defined Radio  
+**SMA** Sub-Miniature A
 **S+P-GW:** Serving Gateway (S-GW) + PDN (Paket Data Network) Gateway (P-GW)  
 **TAI:** Tracking Area Identity  
 **UE:** User Equipment  
