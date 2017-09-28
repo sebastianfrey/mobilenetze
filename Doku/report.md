@@ -398,13 +398,13 @@ Konfigurationsdatei: `/usr/local/etc/oai/spgw.conf`
 | Eigenschaft | Wert | Bedeutung |
 |-------------------------------------|---------------|------------------------------|
 | **P-GW NETWORK_INTERFACES** |||
-| PGW_INTERFACE_NAME_FOR_SGI | wlan001 | Name des Interfaces über die eine Internetverbindung besteht. |
-| PGW_IPV4_ADDRESS_FOR_SGI | 10.0.158.10/24 | IP-Adressbereich des Interfaces über die eine Internetverbindung besteht. |
+| PGW_INTERFACE_NAME_ FOR_SGI | wlan001 | Name des Interfaces über die eine Internetverbindung besteht. |
+| PGW_IPV4_ADDRESS_ FOR_SGI | 10.0.158.10/24 | IP-Adressbereich des Interfaces über die eine Internetverbindung besteht. |
 | PGW_MASQUERADE_SGI | yes | Aktiviert die Übersetzung von internen IP-Adressen im LTE Netz auf IPs im externen Netz. (NAT) |
 | UE_TCP_MSS_CLAMPING | yes | Aktiviert die Abstimmung von max. Paketgrößen für Netze mit unterschiedlichen Maximum Transmission Units (MTUs). |
 ||||
-| DEFAULT_DNS_IPV4_ADDRESS | 158.10.20.1 | DNS Server Adresse zur Auflösung von Domainnamen im IPv4 Bereich |
-| DEFAULT_DNS_SEC_IPV4_ADDRESS | 158.10.20.1 | DNS Server Adresse zur Auflösung von Domainnamen im IPv4 Bereich mit Authentizitäts- und Integritätsprüfung |
+| DEFAULT_DNS_ IPV4_ADDRESS | 158.10.20.1 | DNS Server Adresse zur Auflösung von Domainnamen im IPv4 Bereich |
+| DEFAULT_DNS_SEC_ IPV4_ADDRESS | 158.10.20.1 | DNS Server Adresse zur Auflösung von Domainnamen im IPv4 Bereich mit Authentizitäts- und Integritätsprüfung |
 
 An dieser Stelle sind mehrere Parameter sehr wichtig. Zu aller erst sei das Interface für die Verbindung zum Internet erwähnt. Im Versuchsaufbau war ursprünglich eine Internetverbindung vom internen Netz über ein mittels Cisco Client aufgebautes virtuell private Network (VPN) realisiert. Aus diesem Grund war zunächst der Parameter `PGW_INTERFACE_NAME_FOR_SGI` mit dem Wert `clsc001` gesetzt. Doch dies brachte leider ungewollte Nebeneffekte mit sich. Der Cisco Client hat standardmäßig die Einstellung, dass sämtliche Netzwerkrouten im System auf das eigene Interface umgeleitet werden. Mit dem Befehl `ip route show` kann man sich dieses Verhalten bei aktiviertem VPN anschauen und sieht wie folgt aus:
 
