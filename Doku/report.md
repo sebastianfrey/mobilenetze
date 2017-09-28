@@ -88,29 +88,91 @@ Die eNodeB ist die Schnittstelle zwischen dem Kernnetz (EPC) und den Teilnehmerg
 
 Als Betriebssystem für die eNodeB wird vom OAI ein Ubuntu in der Version 14.04.3 mit low-latency Kernel 3.19 empfohlen, da dieses für die Tests der OAI herangezogen wird. Grundsätzlich können auch andere Distributionen verwendet werden. Hier gibt es jedoch keine Garantie, dass die Build-Skripte sich erwartungsgemäß verhalten. Aus diesem Grund wurde das vorgeschlagene Ubuntu installiert.
 
-Wichtig ist, dass das Betriebssystem auf einem physischen Rechner installiert wird und nicht auf einer virtuellen Maschine. Nur so kann die Echtzeitfähigkeit, welche durch den low-latency Kernel freigeschaltet wird, erreicht werden, die für die Kontrolle der USRP benötigt wird. Nachdem das Betriebssystem auf dem Rechner installiert wurde, muss somit noch der low-latency Kernel installiert werden. Dies lässt sich einfach durch den folgenden Befehl in der Kommandozeile erreichen:
+Wichtig ist, dass das Betriebssystem auf einem physischen Rechner installiert wird und nicht auf einer virtuellen Maschine. Nur so kann die Echtzeitfähigkeit, welche durch den low-latency Kernel freigeschaltet wird, erreicht werden, die für die Verbindung mit der USRP benötigt wird. Nachdem das Betriebssystem auf dem Rechner installiert wurde, musste somit noch der low-latency Kernel installiert werden. Dies lies sich einfach durch den folgenden Befehl in der Kommandozeile erreichen:
 
 ```sh
   sudo apt-get install linux-image-3.19.0-61-lowlatency\
    linux-headers-3.19.0-61-lowlatency
 ```
 
-Damit diese Änderung einen Effekt hat, muss der Rechner neugestartet werden. Anschließend kann der Erfolg durch den Befehl `uname -a` überprüft werden. Hier sollte die Ausgabe folgende Meldung enthalten:
+Damit diese Änderung einen Effekt hatte, musste der Rechner neugestartet werden. Anschließend konnte der Erfolg durch den Befehl `uname -a` überprüft werden. Die Ausgabe entsprach folgender Meldung:
 
 ```sh
 Linux [NAME] 3.19-lowlatency
 ```
 
+Mit diesen Schritten wurde die Grundlage für die Installation des Openairinterfaces geschaffen, welche im nächsten Kapitel beschrieben wird.
 
+### OAI Installationsvorbereitungen
 
+Das Openairinterface liegt als Quelldateien in einem Git Repository vor. Es empfiehlt sich das gesamte Repository zu klonen, da man eventuell auf verschiedenen Branches und Tags zugreifen muss, falls es Probleme gibt. Auch bei diesem Aufbau gab es später Probleme die auf dem vorliegenden Quellcode basieren konnten, da man nach Anleitung auf dem `develop` Branch arbeitet. Um diese auszuschließen, war es hilfreich, ältere Tags auszuchecken und die Funktionen zu überprüfen. Aus diesem Grund wurde das Repository mit folgendem Befehl geklont.
 
+```sh
+git clone https://gitlab.eurecom.fr/oai/openairinterface5g.git
+```
 
+Nach erfolgreichem Download wurde in das Verzeichnis `openairinterface5g` gewechselt und die Working Copy auf den `develop`-Branch aktualisiert.
 
-SW = Ubuntu 14.4_03
-phy. PC mit USB 3
-Ettus SDR (B210)
+```sh
+cd openairinterface5g
+git checkout develop
+git pull
+```
 
-### OAI Installation
+Die vorliegenden Quelldateien konnten nun installiert werden. Bei diesem Vorgang werden die nötigen Abhängigkeiten nachgeladen und passend konfiguriert. Hierzu steht bereits ein automatisches Build-Skript bereit, welches wie folgt ausgeführt werden muss.
+
+```sh
+source oaienv
+cd cmake_targets
+./build_oai -I --eNB -x --install-system-files -w USRP
+```
+
+Was die einzelnen Parameter bewirken, wurde hier festgehalten:
+
+ -I
+~ Installiert die Abhängigkeiten
+
+ --eNB
+~ OAI Konfigurations-Flag für eNodeB
+
+ -x
+~ Fügt ein Software-Oszilloskop zu den erstellten Binärdateien
+
+ --install-system-files
+~ Installiert vom OAI benötigte Dateien ins Linux-System
+
+ -w USRP
+~ Konfiguriert den Hardwaresupport, was in diesem Fall `USRP` ist
+
+Dies sind nicht alle Parameter, die zur Verfügung stehen. Mit dem Befehl `./build_oai -h` lassen sich alle möglichen Einstellungen und dessen Bedeutung anzeigen.
+
+### Konfiguration der eNodeB
+
+Nachdem die eNodeB erfolgreich installiert wurde, konnte sie für den Einsatz konfiguriert werden. Hierzu gibt es im Ordner `targets/PROJECTS/GENERIC-LTE-EPC/CONF/` verschiedene Konfigurationsdateien, die für unterschiedliche Frequenzbänder und eingesetzte Hardware gültig sind. Da hier eine eNodeB mit USRP-B210 im LTE Band 7 konfiguriert werden soll, war die Datei `enb.band7.tm1.usrpb210.conf` für diesen Anwendungsfall passend. Da nicht alle Konfigurationspunkte in der Datei angepasst werden mussten bzw. relevant für den weiteren Verlauf sind, werden in der folgenden Tabelle die wesentlichen Parameter beschrieben. Dabei werden auch die vergebenen Werte für die Eigenschaften angegeben, wobei diese bei einem Nachbau eventuell angepasst werden müssen.
+
+| Eigenschaft | Wert | Bedeutung |
+|-------------------------------------|---------------|------------------------------|
+| tracking_area_code | 1 | Konfiguriert das Gebiet, in dem sich die eNB befindet. |
+| mobile_country_code | 001 | Gibt die Länderkennung an, zu der die eNB gehört. |
+| mobile_network_code | 93 | Setzt die Netzbetreiberkennung, zu der die eNB gehört. |
+| **mme_ip_address** |
+| ipv4 | 10.0.158.254 | IPv4 Adresse der MME, mit der sich die eNB verbinden soll. |
+| ipv6 | 10:10:10::1 | IPv6 Adresse der MME, mit der sich die eNB verbinden soll. |
+| active | yes | Mit diesem Flag wird die Verbindung zur MME aktiviert. |
+| preference | ipv4 | Bestimmt die IP Art, die für die Verbindung bevorzugt wird. |
+| **NETWORK_INTERFACES** |
+| ENB_INTERFACE_NAME_ FOR_S1_MME | eth0 | Interfacename für die Verbindung zur MME bei der eNB. |
+| ENB_IPV4_ADDRESS_ FOR_S1_MME | 10.0.158.254/24 | Adressbereich für die Verbindung zur MME bei der eNB. |
+| ENB_INTERFACE_NAME_ FOR_S1U | eth0 | Interfacename für die Verbindung zur SPGW bei der eNB. |
+| ENB_IPV4_ADDRESS_ FOR_S1U | 10.0.158.254/24 | Adressbereich für die Verbindung zur SPGW eNB. |
+| ENB_PORT_ FOR_S1U | 2152 | Kommunikationsport für die Verbindung zur SPGW. |
+| **component_carriers** |
+| downlink_frequency | 2680000000L | Downlink-Frequenz für die eNB. (Hier Band 7) |
+| uplink_frequency_offset | -120000000 | Offset für die Uplink-Frequenz von der DL-Frequenz. |
+
+Bei den restlichen Konfigurationen haben die Standardwerte für dieses Projekt keinen Einfluss gehabt und werden daher nicht berücksichtigt. Die vollständige im Projekt verwendete Konfigurationsdatei befindet sich in der Anlage.
+
+Nachdem die eNodeB konfiguriert war, kann diese 
 
 Evolved Packet Core (EPC) (Sebastian)
 -------------------------
