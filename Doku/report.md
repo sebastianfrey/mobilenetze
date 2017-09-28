@@ -394,23 +394,32 @@ Herstellen einer Internetverbindung (René)
 Performance (Sebastian)
 ==========
 
-Um die Performance des aufgebauten LTE-Netzes zu testen, wurde mit Hilfe des [Telekom-Speedtest](http://speedtest.t-online.de/) Messungen mit verschiedenen Dämpfungen an der eNodeB durchgeführt. Das UE war dabei an einen dritten Rechner angeschlossen. UE und eNodeB wurden über SMA-Kabel verbunden, da zum Zeitpunkt der Projektdurchführung kein elektromagnetisch gedämmter Raum sowie entsprechend lizenzierte Frequenzspektren zur Verfügung standen.  
+Datenrate und Latenz
+--------------------
 
-Datenrate
----------
+Um die Performance des aufgebauten LTE-Netzes zu testen, wurde mit Hilfe des [Telekom-Speedtest](http://speedtest.t-online.de/) Messungen mit verschiedenen Dämpfungen an der eNodeB durchgeführt. Das UE war dabei an einen dritten Rechner angeschlossen. UE und eNodeB wurden über SMA-Kabel verbunden, da zum Zeitpunkt der Projektdurchführung weder ein elektromagnetisch gedämmter Raum noch entsprechend lizenzierte Frequenzspektren für ein LTE-Netz zur Verfügung standen.
 
-### Uplink
+Die gemessenen Datenraten und Latenzen werden in nachfolgender Tabelle aufgelistet:
 
-### Downlink
-
-### Evaluierung der Messdaten
-
-Latenz
-----------
-
-### Verzögerung der S1-Schnittstelle
+| Dämpfung [dB ]| Downlink [Mb/s] | Uplink [Mb/s] | Latenz [ms]
+|--------------|--------------|--------------|--------------|
+| 0 | 16.48 | 9.43 | 82 |
+| 20 | 16.07 | 9.55 | 72 |
+| 40 | - | - | - |
 
 ### Evaluierung der Messdaten
+
+Es konnten keine siginifikanten Unterschiede bei Verwendung einer Dämpfung von 20dB oder gar keiner Dämpfung (0dB) im Downlink und Uplink erkannt werden. Wiederholtes durchführen der Messungen ergaben ähnliche Werte wie in obiger Tabelle. Bei einer Dämpfung von 40dB konnten keine Messungen mehr durchgeführt werden. Ursache hierfür war vermutlich die zu starke Dämpfung, wodurch nur noch sehr wenige bis gar keine Datenpakete fehlerfrei durch das RAN übertragen werden konnten.
+
+Wie schon bei den Datenraten konnten keine siginifikanten Unterschiede zwischen den unterschiedlichen Dämpfungen festgestellt werden. Überaschenderweise konnten bei einer höheren Dämpfung (20 dB) niedrigere Latenzen als bei gar keiner Dämpfung (0 dB) erzielt werden. Über die Ursache kann an dieser Stelle nur spekuliert werden. Eventuell war der Abstand zwischen UE und eNodeB für gar keine Dämpfung zu kurz. In zukünftigen Versuchsaufbauten könnte dieser Sachverhalt untersucht werden, indem längere SMA-Kabel für die Verbindung zwischen UE und eNodeB verwendet werden.
+
+
+Leider konnten im Rahmen der Projektdurchführung keine Messungen über die Luftschnittstelle aufgrund der bereits erwähnten Einschränkungen durchgeführt werden. Auch dieser Aspekt könnte in zukünftigen Versuchsaufbauten evaluiert werden.
+
+Verzögerung der S1-Schnittstelle
+--------------------------------
+
+Um die Verzögerungen der S1-Schnittstelle zu ermitteln, wurde mit Hilfe von Wireshark zu verschiedenen Szenarien wie die Anmeldung und Abmeldung eines UE an der EPC die Kommunikation zwischen EPC und eNodeB mitgeschnitten. Für die Anmeldung eines UE werden insgesammt neun Signalisierungnachrichten ausgetauscht. Hierbei konnte eine Verzögerung von `0.981325129` Sekunden ermittelt werden. Für die Abmeldung eines UE werden insgesamt vier Signalisierungsnachrichten ausgetauscht. Hierbei konnte eine Verzögerung von `0.201389333` Sekunden ermittelt werden. Zusätzliche verzögert werden über die S1-Schnittstelle bestimmte Signalisierungsnachrichten, welche durch einen `SACK` bestätigt werden müssen.
 
 Signalisierung (Fabian)
 ==========
