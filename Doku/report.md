@@ -1,36 +1,41 @@
 Abkürzungsverzeichnis
 =====================
-Am Ende Alphabetisch sortieren!
 
-**LTE:** Long Term Evolution  
 **eNodeB/eNB:** Evolved Node B  
 **EPC:** Evolved Packet Core  
-**OAI:** Open Air Interface  
-**HSS:** Home Subscriber Server  
-**MME:** Mobility Management Entity  
-**S+P-GW:** Serving Gateway (S-GW) + PDN (Paket Data Network) Gateway (P-GW)  
-**3GPP:** 3rd Generation Partnership Project  
-**SDR:** Software Defined Radio  
 **EUTRAN:** Evolved UMTS Terrestrial Radio Access  
+**GUMMEI:** Globally Unique Mobile Management Entity Identifer  
+**HSS:** Home Subscriber Server  
+**LTE:** Long Term Evolution  
+**MME:** Mobility Management Entity  
+**OAI:** Open Air Interface  
+**OFDM:** Orthogonal Frequency Division Multiplexing  
+**SDR:** Software Defined Radio  
+**S+P-GW:** Serving Gateway (S-GW) + PDN (Paket Data Network) Gateway (P-GW)  
+**TAI:** Tracking Area Identity  
+**UE:** User Equipment  
 **UMTS:** Universal Mobile Telecommunications System  
 **OFDM:** Orthogonal Frequency Division Multiplexing  
-**UE:** User Equipment
-**GUMMEI:** Globally Unique Mobile Management Entity Identifer
-**TAI:** Tracking Area Identity
+**UE:** User Equipment  
+**GUMMEI:** Globally Unique Mobile Management Entity Identifer  
+**TAI:** Tracking Area Identity  
+**USRP:** Universal Software Radio Peripheral 
+**3GPP:** 3rd Generation Partnership Project  
 
 Einleitung (Michael)
 ==========
-Die vorliegende Projektdokumentation ist Teil der Veranstaltung „Mobile Netze“ an der Fakultät für Informatik und Mathematik (FK 07) der Hochschule München im Sommersemester 2017. Das Projekt dient der Vertiefung der in dem Vorlesungsanteil erworbenen Kenntnisse und Fähigkeiten durch praktisches Experimentieren mit mobiler Kommunikation. Im Fall dieses Projekts, geht es um das Verständnis für die grundlegenden Prinzipien von LTE-Netzwerken, sowie die Kenntnis und praktische Erfahrungen mit dort verwendeten Techniken und Standards.
+Die vorliegende Projektdokumentation ist Teil der Veranstaltung „Mobile Netze“ an der Fakultät für Informatik und Mathematik (FK 07) der Hochschule München im Sommersemester 2017. Das Projekt dient dabei der Vertiefung der im Vorlesungsanteil erworbenen Kenntnisse und Fähigkeiten durch praktisches Experimentieren mit mobiler Kommunikation. Im Fall dieses Projekts, geht es um das Verständnis für die grundlegenden Prinzipien von LTE-Netzwerken, sowie die Kenntnis und praktische Erfahrungen mit dort verwendeten Techniken und Standards.
 
 Projektüberblick und Ziele
 --------------------------
-Das Projekt befasst sich mit dem experimentellen Aufbau eines LTE-Netzwerks und versucht sich über dieses Netzwerk mit einem LTE-Stick ins Internet zu verbinden. Das Netzwerk, bestehend aus einer Evolved Node B (eNodeB) und dem Kernnetzwerk (Evolved Packet Core, EPC), soll dabei mit Hilfe des OpenAirInterface (OAI) simuliert werden.
+Das Projekt befasst sich mit dem experimentellen Aufbau eines LTE-Netzwerks und versucht sich über dieses Netzwerk mit einem LTE-Stick ins Internet zu verbinden. Das Netzwerk, bestehend aus einer Evolved Node B (eNodeB) und dem Kernnetzwerk (Evolved Packet Core, EPC), soll dabei mit Hilfe des OpenAirInterface (OAI) simuliert werden.  
 Im Kern ist das Projekt in die folgenden drei Stufen unterteilt:
+
 - Stufe 1: Aufbau einer durchgehenden Verbindung von einem LTE-Stick über die eNodeB bis zur EPC (mit den Komponenten HSS, MME und S+P-GW) mit Hilfe des OpenAirInterface.
 - Stufe 2: Erweiterung der Verbindung durch Anschluss an das Internet.
 - Stufe 3: Evaluierung der Performance bzw. genauere Untersuchungen auf Protokollebene mit Wireshark.
 
-Stufe 1 umfasst dabei die Minimalanforderungen an das Projekt. Die Stufen 2 und 3 sind entsprechende Erweiterungen der Mindestumsetzung.
+Stufe 1 umfasst dabei die Minimalanforderungen an das Projekt. Die Stufen 2 und 3 sind entsprechende Erweiterungen der Mindestumsetzung.  
 Der experimentelle Aufbau soll am Ende die Möglichkeit bieten, ein LTE-Netzwerk und dessen Zusammenhänge genauer zu untersuchen, um ein Verständnis für die Performance sowie die internen Abläufe der einzelnen Netzwerkkomponenten zu bekommen.
 
 Relevante Grundlagen zu LTE
@@ -40,11 +45,12 @@ Der LTE (Long Term Evolution) Standard ist eine Weiterentwicklung von UMTS (Univ
 Zu den wichtigsten Neuerungen von LTE gegenüber UMTS gehört zum einen ein neues Übertragungsverfahren und zum anderen der Fokus auf das paketvermittelnde Internet-Protokoll (IP). LTE verwendet das Übertragungsverfahren Orthogonal Frequency Division Multiplexing (OFDM), dass einen schnellen Datenstrom in viele langsamere Datenströme aufteilt und diese dann gleichzeitig überträgt. Dies führt zu einer erhöhten Datenrate unter LTE. „Während UMTS noch ein leitungsvermittelndes Kernnetz für Sprache-, SMS und andere Dienste hatte, gibt es in LTE nur noch ein paketvermittelndes Kernnetz, über das alle Dienste abgewickelt werden. Einzige Ausnahme ist der SMS-Dienst, der nach wie vor über Signalisierungsnachrichten abgewickelt wird.“ [@sauter15, S. 231 ff.]
 
 Die LTE-Netzwerk-Architektur ist wie bei GSM und UMTS grob in ein Radionetz und ein Kernnetz unterteilt. Unter LTE wurde aber der Anteil logischer Komponenten reduziert, um die Effizienz zu steigern, Kosten zu senken und die Latenzzeiten zu minimieren.  
-Abbildung 1 zeigt alle Komponenten eines LTE-Netzwerks von den mobilen Endgeräten (UEs) bis ins Internet. Die Basisstationen (eNodeBs) bilden zusammen mit den UEs das oben bereits erwähnte Radionetz. Das Kernnetz besteht aus einer Teilnehmerdatenbank (HSS), dem Serving Gateway (Serving-GW), dem Paket Data Network Gateway (PDN-GW) sowie der Benutzerverwaltung (MME). Die MME ist der Netzwerkknoten, der für die Signalisierung zwischen den eNodeBs und dem Kernnetzwerk verantwortlich ist. Das Serving-GW ist verantwortlich für die Weiterleitung von Nutzerdaten in IP-Tunneln zwischen den eNodeBs und dem PDN-Gateway. Das PDN-Gateway bildet am Ende den Übergang zum Internet.
+Die nachfolgende Abbildung zeigt alle Komponenten eines LTE-Netzwerks von den mobilen Endgeräten (UEs) bis hin zum Internet. Die Basisstationen (eNodeBs) bilden zusammen mit den UEs das oben bereits erwähnte Radionetz. Das Kernnetz besteht aus einer Teilnehmerdatenbank (HSS), dem Serving Gateway (Serving-GW), dem Paket Data Network Gateway (PDN-GW) sowie der Benutzerverwaltung (MME). Die MME ist der Netzwerkknoten, der für die Signalisierung zwischen den eNodeBs und dem Kernnetzwerk verantwortlich ist. Das Serving-GW ist verantwortlich für die Weiterleitung von Nutzerdaten in IP-Tunneln zwischen den eNodeBs und dem PDN-Gateway. Das PDN-Gateway bildet am Ende den Übergang zum Internet.
 
 ![LTE-Netzwerk im Überblick](img/LTE-Netzwerk_im_Ueberblick.pdf)
 
-Verbunden sind alle Komponenten über die in Abbildung 1 gezeigten Schnittstellen, die nachfolgend aufgelistet und kurz beschrieben werden [@sauter15, S. 234 ff.]:
+Verbunden sind alle Komponenten über die in obiger Abbildung gezeigten Schnittstellen, die nachfolgend aufgelistet und kurz beschrieben werden [@sauter15, S. 234 ff.]:
+
 - S6a: Schnittstelle für den Informationsaustausch zwischen HSS und MME über das IP-basierte DIAMETER-Protokoll.
 - S1: Schnittstelle zwischen den Basisstationen und dem Kernnetz.
   - S1-CP: Steuerebene (Control Plane) für die Kommunikation der eNodeBs mit dem Kernnetz (um sich beim Netzwerk anzumelden, um Status- und Keep-Alive-Nachrichten zu senden, um Konfigurationsinformationen vom Netzwerk zu erhalten) sowie dem Austausch benutzerspezifischer Signalisierung.
@@ -58,7 +64,7 @@ Verbunden sind alle Komponenten über die in Abbildung 1 gezeigten Schnittstelle
 OpenAirInterface (OAI)
 ----------------------
 Das OpenAirInterface (OAI) ist eine Hardware und Software Technologie-Plattform zum Erstellen einer vollständigen und realitätsnahen LTE-Netzwerknachbildung. Die experimentelle LTE-Implementierung (Release 8 und partiell Release 10) des OAI ist in Standard C für mehrere Echtzeit-Linux-Varianten geschrieben, die für Intel x86 und ARM-Prozessoren optimiert und als freie Software unter dem OAI-Lizenzmodell veröffentlicht wurden. Die Implementierung beinhaltet sowohl EUTRAN (eNB und UE) als auch EPC (MME, S+P-GW, und HSS) und umfasst dabei den kompletten Protokoll-Stack des 3GPP Standards. Das OAI bietet eine umfangreiche Entwicklungsumgebung mit einer Reihe von integrierten Tools wie hoch realistische Emulationsmodi, Soft-Monitoring und Debugging-Tools, einen Protokollanalyzer, Performance-Profiler und ein konfigurierbares Logging-System für alle Layer und Kanäle. [@openairinterface]  
-Im vorliegenden Projekt wird das OAI dazu genutzt, um eine LTE Base Station (OAI eNB) und ein Core Network (OAI EPC) auf je einem PC zu bauen und einzurichten (siehe Abbildung 2 und 3). Die OAI eNB kann entweder mit kommerziellen UEs oder OAI UEs verbunden werden, um verschiedene Konfigurationen und Netzwerkaufbauten zu testen und das Netzwerk sowie das mobile Gerät in Echtzeit zu überwachen. Im Folgenden steht jedoch die Verwendung eines kommerziellen User Equipments (UE) im Fokus.
+Im vorliegenden Projekt wird das OAI dazu genutzt, um eine LTE Base Station (OAI eNB) und ein Core Network (OAI EPC) auf je einem PC zu bauen und einzurichten (siehe die beiden folgenden Abbildung). Die OAI eNB kann entweder mit kommerziellen UEs oder OAI UEs verbunden werden, um verschiedene Konfigurationen und Netzwerkaufbauten zu testen und das Netzwerk sowie das mobile Gerät in Echtzeit zu überwachen. Im Folgenden steht jedoch die Verwendung eines kommerziellen User Equipments (UE) im Fokus.
 
 ![OpenAirInterface und dessen Bestandteile](img/OpenAirInterface_und_dessen_Bestandteile.pdf)
 
@@ -67,22 +73,112 @@ Des Weiteren ist zu erwähnen, dass für die Erstellung der LTE-Netzwerknachbild
 
 Versuchsaufbau
 --------------
-Der in diesem Projekt verwendete Versuchsaufbau ist der untenstehenden Abbildung 3 zu entnehmen. Er besteht aus vier zentralen Komponenten, die nachfolgend kurz beschrieben werden. Das mobile Endgerät, sprich die UE, besteht aus einem Huawei LTE-Stick (E3372), welcher mit der Basisstation (eNodeB) verbunden ist. Die eNodeB wird durch das OAI abgebildet und läuft auf einem physikalischen PC. Da im Umfeld dieses Projekts nicht gefunkt werden darf, ist die Verbindung vom UE zur eNodeB kabelgebunden. Dafür wird neben einem Softwere Defined Radio (USRP B210) auch ein LTE Band7 Duplexer sowie entsprechende Dämpfungsglieder zwischengeschalten. Die EPC, bestehend aus der MME, der HSS und dem S+P-GW, wird ebenfalls durch das OAI abgebildet und läuft auf einem zweiten physischen PC. Die vierte und letzte Komponente stellt dann noch das Internet dar, mit dem sich am Ende der LTE-Stick über die eNodeB und den EPC verbinden soll.
+Der für die Umsetzung dieses Projekts erstellte Versuchsaufbau ist grob der untenstehenden Abbildung zu entnehmen. Er besteht aus den vier zentralen Komponenten UE, eNodeB, EPC und Internet, die nachfolgend alle kurz beschrieben werden.  
+Das mobile Endgerät, sprich die UE, besteht aus einem Huawei LTE-Stick (E3372), der mit der Basisstation (eNodeB) verbunden ist. Darin zum Einsatz kommt eine durch das Labor zur Verfügung gestellte Test-SIM-Karte. Die eNodeB wird durch das OAI abgebildet und läuft auf einem physikalischen PC mit dem Betriebssystem Ubuntu 16.04 LTS. Da im Umfeld dieses Projekts nicht gefunkt werden darf, ist die Verbindung vom UE zur eNodeB kabelgebunden. Dafür wird neben einem Software Defined Radio (USRP B210) auch ein LTE Band7 Duplexer sowie entsprechende Dämpfungsglieder zwischen den LTE-Stick und die eNodeB geschalten. Die EPC, bestehend aus der MME, der HSS und dem S+P-GW, wird ebenfalls durch das OAI abgebildet und läuft auf einem zweiten physischen PC. Auch darauf läuft, wie von OAI für die EPC empfohlen, das Betriebssystem Ubuntu 16.04 LTS. Die vierte und letzte Komponente stellt dann noch das Internet dar, mit dem sich am Ende der LTE-Stick über die eNodeB und den EPC verbinden soll. Aufgrund von Routing-Problemen, ausgelöst durch den CiscoAnyConnect-VPN-Client, kommt für den Zugang zum Internet zusätzlich ein EDIMAX WLAN-Stick zum Einsatz.
 
 ![Versuchsaufbau](img/Versuchsaufbau.pdf)
 
 Aufsetzen der Projektumgebung
 =============================
 
-Evolved Node B (eNodeB) (René)
------------------------
+In diesem Kapitel wird der Projektablauf beschrieben, was dem Aufbau, der Installation und Konfiguration des in dem vorhergehenden Kapitel beschriebenen Versuchsaufbaus entspricht. Besonders wird auf benötigte Komponenten und speziellen Konfigurationen eingegangen, die für die erfolgreiche Umsetzung essentiell gewesen sind.
+
+Als Vorlage zum Vorgehen wurde ein Tutorial von OAI herangezogen. [@oaicotsuetutorial] Dieses gibt bereits eine gute Hilfe zum Einstieg und beschreibt die wichtigsten Schritte zum Aufbau des Netzes (ohne Internetverbindung). Leider ist es in manchen Punkten etwas zu ungenau bzw. nicht vollständig, sodass tiefgründigere und nicht vom Tutorial beschriebene Konfigurationen nötig waren. Hauptsächlich lag dies an abweichenden Rahmenbedingungen, weshalb im folgenden der gesamte Ablauf beschrieben wird.
+
+Evolved Node B (eNodeB)
+-----------------------------
+
+Die eNodeB ist die Schnittstelle zwischen dem Kernnetz (EPC) und den Teilnehmergeräten (UEs). Es bildet eine Funkzelle, mit der einzelne UEs kommunizieren können und Daten von bzw. zum Kernnetz weitergeleitet werden. Der Aufbau besteht aus einem Universal Software Radio Peripheral (USRP) welches durch einen einen physischen Rechner betrieben wird. Der genaue Aufbau und die Konfiguration werden im folgenden Abschnitt beschrieben.
 
 ### Konfiguration der Hardware/Software
-SW = Ubuntu 14.4_03
-phy. PC mit USB 3
-Ettus SDR (B210)
 
-### OAI Installation
+Als Betriebssystem für die eNodeB wird vom OAI ein Ubuntu in der Version 14.04.3 mit low-latency Kernel 3.19 empfohlen, da dieses für die Tests der OAI herangezogen wird. Grundsätzlich können auch andere Distributionen verwendet werden. Hier gibt es jedoch keine Garantie, dass die Build-Skripte sich erwartungsgemäß verhalten. Aus diesem Grund wurde das vorgeschlagene Ubuntu installiert.
+
+Wichtig ist, dass das Betriebssystem auf einem physischen Rechner installiert wird und nicht auf einer virtuellen Maschine. Nur so kann die Echtzeitfähigkeit, welche durch den low-latency Kernel freigeschaltet wird, erreicht werden, die für die Verbindung mit der USRP benötigt wird. Nachdem das Betriebssystem auf dem Rechner installiert wurde, musste somit noch der low-latency Kernel installiert werden. Dies lies sich einfach durch den folgenden Befehl in der Kommandozeile erreichen:
+
+```sh
+  sudo apt-get install linux-image-3.19.0-61-lowlatency\
+   linux-headers-3.19.0-61-lowlatency
+```
+
+Damit diese Änderung einen Effekt hatte, musste der Rechner neugestartet werden. Anschließend konnte der Erfolg durch den Befehl `uname -a` überprüft werden. Die Ausgabe entsprach folgender Meldung:
+
+```sh
+Linux [NAME] 3.19-lowlatency
+```
+
+Mit diesen Schritten wurde die Grundlage für die Installation des Openairinterfaces geschaffen, welche im nächsten Kapitel beschrieben wird.
+
+### OAI Installationsvorbereitungen
+
+Das Openairinterface liegt als Quelldateien in einem Git Repository vor. Es empfiehlt sich das gesamte Repository zu klonen, da man eventuell auf verschiedenen Branches und Tags zugreifen muss, falls es Probleme gibt. Auch bei diesem Aufbau gab es später Probleme die auf dem vorliegenden Quellcode basieren konnten, da man nach Anleitung auf dem `develop` Branch arbeitet. Um diese auszuschließen, war es hilfreich, ältere Tags auszuchecken und die Funktionen zu überprüfen. Aus diesem Grund wurde das Repository mit folgendem Befehl geklont.
+
+```sh
+git clone https://gitlab.eurecom.fr/oai/openairinterface5g.git
+```
+
+Nach erfolgreichem Download wurde in das Verzeichnis `openairinterface5g` gewechselt und die Working Copy auf den `develop`-Branch aktualisiert.
+
+```sh
+cd openairinterface5g
+git checkout develop
+git pull
+```
+
+Die vorliegenden Quelldateien konnten nun installiert werden. Bei diesem Vorgang werden die nötigen Abhängigkeiten nachgeladen und passend konfiguriert. Hierzu steht bereits ein automatisches Build-Skript bereit, welches wie folgt ausgeführt werden muss.
+
+```sh
+source oaienv
+cd cmake_targets
+./build_oai -I --eNB -x --install-system-files -w USRP
+```
+
+Was die einzelnen Parameter bewirken, wurde hier festgehalten:
+
+ -I
+~ Installiert die Abhängigkeiten
+
+ --eNB
+~ OAI Konfigurations-Flag für eNodeB
+
+ -x
+~ Fügt ein Software-Oszilloskop zu den erstellten Binärdateien
+
+ --install-system-files
+~ Installiert vom OAI benötigte Dateien ins Linux-System
+
+ -w USRP
+~ Konfiguriert den Hardwaresupport, was in diesem Fall `USRP` ist
+
+Dies sind nicht alle Parameter, die zur Verfügung stehen. Mit dem Befehl `./build_oai -h` lassen sich alle möglichen Einstellungen und dessen Bedeutung anzeigen.
+
+### Konfiguration der eNodeB
+
+Nachdem die eNodeB erfolgreich installiert wurde, konnte sie für den Einsatz konfiguriert werden. Hierzu gibt es im Ordner `targets/PROJECTS/GENERIC-LTE-EPC/CONF/` verschiedene Konfigurationsdateien, die für unterschiedliche Frequenzbänder und eingesetzte Hardware gültig sind. Da hier eine eNodeB mit USRP-B210 im LTE Band 7 konfiguriert werden soll, war die Datei `enb.band7.tm1.usrpb210.conf` für diesen Anwendungsfall passend. Da nicht alle Konfigurationspunkte in der Datei angepasst werden mussten bzw. relevant für den weiteren Verlauf sind, werden in der folgenden Tabelle die wesentlichen Parameter beschrieben. Dabei werden auch die vergebenen Werte für die Eigenschaften angegeben, wobei diese bei einem Nachbau eventuell angepasst werden müssen.
+
+| Eigenschaft | Wert | Bedeutung |
+|-------------------------------------|---------------|------------------------------|
+| tracking_area_code | 1 | Konfiguriert das Gebiet, in dem sich die eNB befindet. |
+| mobile_country_code | 001 | Gibt die Länderkennung an, zu der die eNB gehört. |
+| mobile_network_code | 93 | Setzt die Netzbetreiberkennung, zu der die eNB gehört. |
+| **mme_ip_address** |
+| ipv4 | 10.0.158.254 | IPv4 Adresse der MME, mit der sich die eNB verbinden soll. |
+| ipv6 | 10:10:10::1 | IPv6 Adresse der MME, mit der sich die eNB verbinden soll. |
+| active | yes | Mit diesem Flag wird die Verbindung zur MME aktiviert. |
+| preference | ipv4 | Bestimmt die IP Art, die für die Verbindung bevorzugt wird. |
+| **NETWORK_INTERFACES** |
+| ENB_INTERFACE_NAME_ FOR_S1_MME | eth0 | Interfacename für die Verbindung zur MME bei der eNB. |
+| ENB_IPV4_ADDRESS_ FOR_S1_MME | 10.0.158.254/24 | Adressbereich für die Verbindung zur MME bei der eNB. |
+| ENB_INTERFACE_NAME_ FOR_S1U | eth0 | Interfacename für die Verbindung zur SPGW bei der eNB. |
+| ENB_IPV4_ADDRESS_ FOR_S1U | 10.0.158.254/24 | Adressbereich für die Verbindung zur SPGW eNB. |
+| ENB_PORT_ FOR_S1U | 2152 | Kommunikationsport für die Verbindung zur SPGW. |
+| **component_carriers** |
+| downlink_frequency | 2680000000L | Downlink-Frequenz für die eNB. (Hier Band 7) |
+| uplink_frequency_offset | -120000000 | Offset für die Uplink-Frequenz von der DL-Frequenz. |
+
+Bei den restlichen Konfigurationen haben die Standardwerte für dieses Projekt keinen Einfluss gehabt und werden daher nicht berücksichtigt. Die vollständige im Projekt verwendete Konfigurationsdatei befindet sich in der Anlage.
+
+Nachdem die eNodeB konfiguriert war, kann diese 
 
 Evolved Packet Core (EPC) (Sebastian)
 -------------------------
