@@ -194,8 +194,9 @@ Das LTE-Softmodem stellt dabei die Steuerung der USRP da und bildet die Schnitts
 
 Wenn die eNodeB richtig konfiguriert und angeschlossen ist, dann versucht diese sich mit dem Kernnetz, der EPC, zu verbinden. Wie diese aufgebaut und konfiguriert wurde, wird im folgenden Kapitel beschrieben.
 
-Evolved Packet Core (EPC) (Sebastian)
+Evolved Packet Core (EPC)
 -------------------------
+[Frey]
 
 Der EPC ist neben der eNodeB das zweite zentrale Element des aufzubauenden LTE-Netzwerkes. Es setzt sich aus den drei Komponenten HSS, MME und SPGW zusammen. Dabei ist es möglich die einzelnen Komponenten des EPC auf verschiedenen Rechnern zu installieren. Im Rahmen dieses Projektes wurden der Einfachheit halber jedoch die EPC Komponenten auf einem Rechner installiert. Die einzelnen Schritte zur Installation und Integration des OAI EPC's werden in den Folgenden Abschnitten erörtert.
 
@@ -433,8 +434,10 @@ Doch durch einen weiteren wichtigen Parameter konnte noch keine direkte Verbindu
 
 Mit der so erfolgten Konfiguration konnte das UE mit dem Internet erfolgreich verbunden werden und das 2. Ziel wurde erreicht.
 
-Performance (Sebastian)
+Performance
 ==========
+
+[Frey]
 
 Datenrate und Latenz
 --------------------
