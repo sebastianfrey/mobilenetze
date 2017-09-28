@@ -237,7 +237,7 @@ Bevor nun mit der Installation des EPCs fortgefahren wird, muss unter `<openair-
 ```c
 // Quelle: https://gitlab.eurecom.fr/oai/openair-cn/commit/0d574905cbdedd30fdba7f6e3062db268761f0b7
 // #define IMSI_64_FMT              "%"SCNu64
-// Erkennt nun auch IMSI's mit führenden Nullen.
+// Erkennt nun auch IMSI's der Struktur 00...
 #define IMSI_64_FMT              "%015"SCNu64
 ``` 
 
