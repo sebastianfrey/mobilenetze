@@ -286,50 +286,50 @@ In tabellarischer Form werden nachfolgend für jede Komponente seperat die angep
 
 `/usr/local/etc/oai/mme.conf`
 
-| Eigenschaft | Bedeutung  |
-|-------------------------------|------------------------------------------------------|
-| REALM | Definiert den Domainbereich unter dem MME, HSS und S+P-GW ansprechbar sind. Wenn bei der Konfiguration des Hosts ein anderes Realm als `openair4G.eur` verwendet wurde, muss dieser Parameter entsprechend angepasst werden. |
-| GUMMEI_LIST | Konfiguriert die von der MME zur Verfügung gestellten GUMMEIs. Im Rahmen der Projektdurchführung wurden ein MCC von `001` und ein MNC von `93` verwendet. |
-| TAI_LIST | Konfiguriert den TAI der MME. Für den MCC und den MNC in der TAI_LIST wurden die selben Werte wie für die GUMMEI_LIST verwendet. |
-| MME_INTERFACE_NAME_ FOR_S1_MME | Konfiguriert das für die S1-Signalisierung zu verwendende Netzwerkinterface. Hier muss ein Netzwerkinterface eingetragen werden, über das die eNB erreicht werden kann. |
-| MME_IPV4_ADDRESS_ FOR_S1_MME | Definiert unter welcher IP-Adresse und Subnetzmaske die MME auf S1-Signalisierungsnachrichten reagiert. Unter Umständen muss hier die Subnetzmaske angepasst werden, sofern sich das Netzwerkgateway ändern sollte. |
+| Eigenschaft | Wert | Bedeutung  |
+|-------------------------------------|---------------|------------------------------|
+| REALM | `openair4G.eur` | Definiert den Domainbereich unter dem MME, HSS und S+P-GW ansprechbar sind. Wenn bei der Konfiguration des Hosts ein anderes Realm als `openair4G.eur` verwendet wurde, muss dieser Parameter entsprechend angepasst werden. |
+| GUMMEI_LIST | TODO | Konfiguriert die von der MME zur Verfügung gestellten GUMMEIs. Im Rahmen der Projektdurchführung wurden ein MCC von `001` und ein MNC von `93` verwendet. |
+| TAI_LIST | TODO | Konfiguriert den TAI der MME. Für den MCC und den MNC in der TAI_LIST wurden die selben Werte wie für die GUMMEI_LIST verwendet. |
+| MME_INTERFACE_NAME_ FOR_S1_MME | `eth0` | Konfiguriert das für die S1-Signalisierung zu verwendende Netzwerkinterface. Hier muss ein Netzwerkinterface eingetragen werden, über das die eNB erreicht werden kann. |
+| MME_IPV4_ADDRESS_ FOR_S1_MME | `10.0.158.10/24` | Definiert unter welcher IP-Adresse und Subnetzmaske die MME auf S1-Signalisierungsnachrichten reagiert. Unter Umständen muss hier die Subnetzmaske angepasst werden, sofern sich das Netzwerkgateway ändern sollte. |
 
 
 `/usr/local/etc/oai/mme_fd.conf`
 
 
-| Eigenschaft | Bedeutung |
-|-------------------------------|------------------------------------------------------|
-| Identity | Der Hostname unter dem die MME erreichbar ist. Dieser wurde von `yang.openair4G.eur` zu `hss.openair4G.eur` geändert.
-| Realm | Der Domainbreich muss nur angepasst werden, wenn der Standarddomainbereich `openair4G.eur` nicht verwendet wurde.
+| Eigenschaft | Wert | Bedeutung |
+|-------------------------------------|---------------|------------------------------|
+| Identity | `hss.openair4G.eur` | Der Hostname unter dem die MME erreichbar ist. Dieser wurde von `yang.openair4G.eur` zu `hss.openair4G.eur` geändert.
+| Realm | `openair4G.eur` | Der Domainbreich muss nur angepasst werden, wenn der Standarddomainbereich `openair4G.eur` nicht verwendet wurde.
 
 
 `/usr/local/etc/oai/hss.conf`
 
-| Eigenschaft | Bedeutung |
-|-------------------------------|------------------------------------------------------|
-| MySQL_user | Benutzername des Datenbanknutzers, der bei der Installation des MySQL-Servers angegeben wurde. |
-| MySQL_pass | Passwort des Benutzernamens. |
-| OPERATOR_key | Zeichenkette die zur dynamischen Generierung des SIM-Karten OPcs verwendet wird. Im Rahmen der Projektumsetzung wurde auf die dynamische Generierung verzichtet, da die zur Verfügung stehenden SIM-Karten mit einem festen OPc programmiert wurden. Dazu wurde der Wert auf Leerstring gesetzt. |
+| Eigenschaft | Wert | Bedeutung |
+|-------------------------------------|---------------|------------------------------|
+| MySQL_user | `root` | Benutzername des Datenbanknutzers, der bei der Installation des MySQL-Servers angegeben wurde. |
+| MySQL_pass | `wlankabel42` | Passwort des Benutzernamens. |
+| OPERATOR_key | `` | Zeichenkette die zur dynamischen Generierung des SIM-Karten OPcs verwendet wird. Im Rahmen der Projektumsetzung wurde auf die dynamische Generierung verzichtet, da die zur Verfügung stehenden SIM-Karten mit einem festen OPc programmiert wurden. Dazu wurde der Wert auf Leerstring gesetzt. |
 
 `/usr/local/etc/oai/hss_fd.conf`
 
-| Eigenschaft | Bedeutung |
-|-------------------------------|------------------------------------------------------|
-| Identity | Der Hostname unter dem der HSS erreichbar ist. Hier entspricht der Standardwert dem im Projekt verwendeten Hostnamen `hss.openair4G.eur`. |
-| Realm | Der Domainbreich muss nur angepasst werden, wenn der Standarddomainbereich `openair4G.eur` nicht verwendet wurde. |
+| Eigenschaft | Wert | Bedeutung |
+|-------------------------------------|---------------|------------------------------|
+| Identity | `hss.openair.4G.eur` | Der Hostname unter dem der HSS erreichbar ist. Hier entspricht der Standardwert dem im Projekt verwendeten Hostnamen `hss.openair4G.eur`. |
+| Realm | `openair4G.eur` | Der Domainbreich muss nur angepasst werden, wenn der Standarddomainbereich `openair4G.eur` nicht verwendet wurde. |
 
 `/usr/local/etc/oai/spgw.conf`
 
-| Eigenschaft | Bedeutung |
-|-------------------------------|------------------------------------------------------|
-| SGW_INTERFACE_NAME_ FOR_S1U_S12_S4_UP | Konfiguriert das für S1U-, S12- und S4-Signalisierungsnachrichten zu verwendende Netzwerkinterface. Hier muss ein Netzwerkinterface eingetragen werden, über das die eNB erreicht werden kann. |
-| SGW_IPV4_ADDRESS_ FOR_S1U_S12_S4_UP | Definiert unter welcher IP-Adresse und Subnetzmaske das S-GW auf Signalisierungsnachrichten reagiert. Unter Umständen muss hier die Subnetzmaske angepasst werden, sofern sich das Netzwerkgateway ändern sollte. |
-| PGW_INTERFACE_NAME_ FOR_SGI | Konfiguriert das für die Internetanbindung zu verwendende Netzwerkinterface. Hier muss ein Netzwerkinterface eingetragen werden, welches über Internetanbindung verfügt. | 
-| PGW_MASQUERADE_SGI | Über diesen Parameter kann konfiguriert werden, ob das P-GW Netzwerkadressübersetzung durchführt oder nicht. Der Standardwert ist `no`. Bei der Projektumsetzung wurde der Wert auf `yes` gesetzt. |
-| UE_TCP_MSS_CLAMPING | Über diesen Parameter kann konfiguriert werden, ob das P-GW die Anzahl der Bytes für Nutzerdaten maximieren soll oder nicht. Der Standardwert ist `no`. Bei der Projektumsetzung wurder der Wert auf `yes` gesetzt, da mit dem Standardwert keine Internetkommunikation möglich war. |
-| DEFAULT_DNS_IPV4_ ADDRESS | Konfiguriert den Standard DNS-Server, welcher den UE beim Verbindungsaufbau mit dem P-GW mitgeteilt wird. |
-| DEFAULT_DNS_SEC_ IPV4_ADDRESS | Konfiguriert den abgesicherten Standard DNS-Server, welcher den UE beim Verbindungsaufbau mit dem P-GW mitgeteilt wird. |
+| Eigenschaft | Wert | Bedeutung |
+|-------------------------------------|---------------|------------------------------|
+| SGW_INTERFACE_NAME_ FOR_S1U_S12_S4_UP | `eth0` | Konfiguriert das für S1U-, S12- und S4-Signalisierungsnachrichten zu verwendende Netzwerkinterface. Hier muss ein Netzwerkinterface eingetragen werden, über das die eNB erreicht werden kann. |
+| SGW_IPV4_ADDRESS_ FOR_S1U_S12_S4_UP | `10.0.158.10/24` | Definiert unter welcher IP-Adresse und Subnetzmaske das S-GW auf Signalisierungsnachrichten reagiert. Unter Umständen muss hier die Subnetzmaske angepasst werden, sofern sich das Netzwerkgateway ändern sollte. |
+| PGW_INTERFACE_NAME_ FOR_SGI | `wlan0` | Konfiguriert das für die Internetanbindung zu verwendende Netzwerkinterface. Hier muss ein Netzwerkinterface eingetragen werden, welches über Internetanbindung verfügt. | 
+| PGW_MASQUERADE_SGI | `yes` | Über diesen Parameter kann konfiguriert werden, ob das P-GW Netzwerkadressübersetzung durchführt oder nicht. Der Standardwert ist `no`. Bei der Projektumsetzung wurde der Wert auf `yes` gesetzt. |
+| UE_TCP_MSS_CLAMPING | `yes` | Über diesen Parameter kann konfiguriert werden, ob das P-GW die Anzahl der Bytes für Nutzerdaten maximieren soll oder nicht. Der Standardwert ist `no`. Bei der Projektumsetzung wurder der Wert auf `yes` gesetzt, da mit dem Standardwert keine Internetkommunikation möglich war. |
+| DEFAULT_DNS_IPV4_ ADDRESS | `8.8.8.8` | Konfiguriert den Standard DNS-Server, welcher den UE beim Verbindungsaufbau mit dem P-GW mitgeteilt wird. |
+| DEFAULT_DNS_SEC_ IPV4_ADDRESS | `8.8.8.4` | Konfiguriert den abgesicherten Standard DNS-Server, welcher den UE beim Verbindungsaufbau mit dem P-GW mitgeteilt wird. |
 
 
 Neben der zurvor getätigten Konfiguration des EPCs, wurden noch zwei Zertifikate für MME und HSS installiert. Mit Hilfe dieser beiden Zertifikate wird die S6a-Schnittstelle zwischen MME und HSS abgesichert. Zum installieren der Zertifikate wurde in das `<openair-cn>/scripts`-Verzeichnis gewechselt. Anschließend wurde die Installation der Zertifikate wie folgt vorgenommen:
@@ -444,7 +444,7 @@ Um die Performance des aufgebauten LTE-Netzes zu testen, wurde mit Hilfe des [Te
 Die gemessenen Datenraten und Latenzen werden in nachfolgender Tabelle aufgelistet:
 
 | Dämpfung [dB ]| Downlink [Mb/s] | Uplink [Mb/s] | Latenz [ms]
-|--------------|--------------|--------------|--------------|
+|---------------------------|---------------------------|---------------------------|---------------------------|
 | 0 | 16.48 | 9.43 | 82 |
 | 20 | 16.07 | 9.55 | 72 |
 | 40 | - | - | - |
