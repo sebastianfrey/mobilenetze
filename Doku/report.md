@@ -129,7 +129,8 @@ Der Kernel wurde dann mit Folgenden Kommandos installiert:
 cd ~/Documents
 git clone https://gitlab.eurecom.fr/oai/linux-4.7.x.git
 cd linux-4.7.x
-sudo dpkg -i linux-headers-4.7.7-oaiepc_4.7.7-oaiepc-10.00.Custom_amd64.deb linux-image-4.7.7-oaiepc_4.7.7-oaiepc-10.00.Custom_amd64.deb
+sudo dpkg -i linux-headers-4.7.7-oaiepc_4.7.7-oaiepc-10.00.Custom_amd64.deb
+             linux-image-4.7.7-oaiepc_4.7.7-oaiepc-10.00.Custom_amd64.deb
 ```
 
 Mit dem Befehl `uname -r` lässt sich überprüfen ob die Kernelinstallation erfolgreich war oder nicht. Als Ausgabe in der Kommandzeile sollte hier `4.7.7-oaiepc` oder ähnlich erscheinen.
@@ -152,19 +153,19 @@ sudo nano /etc/hosts
 
 ```
 
-Nachdem dem Kernelupdate und dem Anpassen des Hostnames sowie der Hosts-Konfiguration, empfiehlt es sich den Rechner neu zu starten und die vorher getätigten Anpassungen noch einmal zu überprüfen. So kann es eventuell passieren, dass während dem Bootvorgang ein anderer Kernel als der zuvor installierte geladen wird. Dies lässt sich beheben in dem man beim Bootvorgang den korrekten Kernel manuell wählt. Damit nicht bei jedem Neustart des EPC-Rechners der Kernel manuell gewählt werden muss, empfiehlt es sich in der  `/etc/default/grub` Konfigurationsdatei den `GRUB_DEFAULT` Wert anzupassen. Null bedeutet, dass der Default Kernel geladen wird. Entweder setzt man den `GRUB_DEFAULT` Wert auf den Index des beim Bootvorgang gewünschten Kernels oder man gibt hier den vollen Namen des Kernels wie er im Grub-Menü angezeigt wird an. Vorsicht vor Tippfehlern, denn die können dazu führen, dass der Rechner unter Umständen nicht mehr korrekt bootet.
+Nachdem dem Kernelupdate und dem Anpassen des Hostnames sowie der Hosts-Konfiguration, empfiehlt es sich den Rechner neu zu starten und die vorher getätigten Anpassungen noch einmal zu überprüfen. So kann es eventuell passieren, dass während dem Bootvorgang ein anderer Kernel als der zuvor installierte geladen wird. Dies lässt sich beheben in dem man beim Bootvorgang den korrekten Kernel manuell wählt. Damit nicht bei jedem Neustart des EPC-Rechners der Kernel manuell gewählt werden muss, empfiehlt es sich in der  `/etc/default/grub` Konfigurationsdatei den `GRUB_DEFAULT` Wert anzupassen. Null bedeutet, dass der Default Kernel geladen wird. Entweder wird der `GRUB_DEFAULT`-Wert auf den Index des beim Bootvorgang gewünschten Kernels oder auf den vollen Namen des Kernels, so wie er im Grub-Bootmenu angezeigt wird, gesetzt. Vorsicht vor Tippfehlern, denn die können dazu führen, dass der Rechner unter Umständen nicht mehr korrekt bootet.
 
-### OAI Installation
+### EPC Installationsvorbereitungen
 
-Im Vorherigen Abschnitt wurde beschrieben, wie ein Rechner für die Installation des OAI-EPCs vorbreitet werden muss. Im nachfolgendem Abschnitt wird angenommen, dass die Installation und Vorbereitung des Rechners nach der Anleitung im vorherigen Abschnitt durchgeführt wurde.
+Im Vorherigen Abschnitt wurde beschrieben, wie ein Rechner für die Installation des OAI-EPCs vorbreitet werden muss. In nachfolgendem Abschnitt wird angenommen, dass die Installation und Vorbereitung des Rechners nach der Anleitung im vorherigen Abschnitt durchgeführt wurde.
 
-Zuerst muss man den Sourcecode für das EPC auschecken.
+Zuerst muss der Sourcecode für das EPC ausgecheckt werden.
 
 ```bash
 git clone https://gitlab.eurecom.fr/oai/openair-cn.git
 ```
 
-Nach erfoglreichem Download wechselt man in das Verzeichnis `openair-cn`, wechselt in den Developbranch und aktualisiert diesen.
+Nach erfoglreichem Download wird in das Verzeichnis `openair-cn` gewechselt und die Working Copy auf den `develop`-Branch aktualisiert.
 
 ```bash
 cd openair-cn
@@ -172,29 +173,23 @@ git checkout develop
 git pull
 ```
 
-Mit `git status` lässt sich überprüfen ob man tatsächlich auf dem aktuellsten Stand ist. Anschließend wechselt man in das `script`-Verzeichnis und installiert nacheinander die einzelnen Komponenten des EPC, die da wären:
-
-- MME
-- HSS
-- S+P-GW
-
-Die Befehle zum Installieren der Komponenten sollten der Reihe nach und einzeln ausgeführt werden.
+Mit `git status` lässt sich überprüfen ob die Working Copy tatsächlich auf dem aktuellsten Stand ist. Anschließend wird in das `<openair-cn>/scripts`-Verzeichnis gewechselt und nacheinander jede EPC-Komponente einzelnen kompiliert. Die Befehle zum Kompilieren der Komponenten sollten der Reihe nach und sperat ausgeführt werden.
 
 ```bash
-./build_mme -i
+./build_mme -
 ./build_hss -i
 ./build_spgw -i
 ```
 
-Während dem Installationsvorgang der einzelnen Komponenten werden zusätzliche System Abhängigkeiten installiert. Hierbei muss man interaktiv die Installation verschiedener Pakete zulassen. Des Weiteren wird ein MySQL-Server, sofern nicht vorhanden, und phpMyAdmin als Datenbanktool installiert und eingerichtet. Ein Stolperstein bei der Installation von phpMyAdmin ist die korrekte Auswahl des Webservers im Installationsmenü vorzunehmen. Hier sollte darauf geachtet werden, dass der gewünschte Webserver für die Ausführung von phpMyAdmin durch ein vorangestellten roten Punkt gekennzeichnet ist.
+Während des Kompiliervorgangs der einzelnen Komponenten werden zusätzliche System Abhängigkeiten installiert. Hierbei muss interaktiv die Installation verschiedener Pakete zugelassen werden. Des Weiteren wird ein MySQL-Server, sofern nicht vorhanden, und phpMyAdmin als Datenbanktool installiert und eingerichtet. Ein Stolperstein bei der Installation von phpMyAdmin ist die korrekte Auswahl des Webservers im Installationsmenü vorzunehmen. Hier sollte darauf geachtet werden, dass der gewünschte Webserver für die Ausführung von phpMyAdmin durch ein vorangestellten roten Punkt gekennzeichnet ist.
 
 Nach erfolgreicher Installation von MME, HSS und S+P-GW kann noch überprüft werden ob der MySQL-Server und phpMyAdmin auf dem EPC-Rechner korrekt installiert wurden. Dazu navigiert man im Browser auf `http://localhost/phpmyadmin`.
 
 ### Konfiguration von HSS, MME und S+P-GW
 
-Da nun MME, HSS und S+P-GW erfolgreich installiert wurden, müsse die Konfigurationsdateien zu jeder Komponente angepasst werden. Dazu muss man die Standardtemplates der einzelnen Konfigurationen nach `/usr/local/etc/oai` kopieren. Außerdem muss das Verzeichnis `/usr/local/etc/oai/freeDiameter` erstellt werden.
+Da nun MME, HSS und S+P-GW erfolgreich installiert wurden, müsse die Konfigurationsdateien zu jeder Komponente angepasst werden. Dazu müssen die Standardtemplates der einzelnen Konfigurationen nach `/usr/local/etc/oai` kopieret werden. Außerdem muss das Verzeichnis `/usr/local/etc/oai/freeDiameter` erstellt werden.
 
-Zum Kopieren der Konfigurationsdateien kann man Folgende Befehel verwenden:
+Die Konfigurationsdateien können über folgende Befehele kopiert werden:
 
 ```bash
 sudo cp ~/openair-cn/etc/mme.conf /usr/local/etc/oai
@@ -205,32 +200,97 @@ sudo cp ~/openair-cn/etc/mme_fd.conf /usr/local/etc/oai/freeDiameter
 sudo cp ~/openair-cn/etc/hss_fd.conf /usr/local/etc/oai/freeDiameter
 ``` 
 
-Zunächst wird die Konfiguration der MME  `/usr/local/etc/oai/mme.conf`. Der Einfachheit halber werden die einzelenen Konfigurationsparameter in tabellarischer Form aufgelistet. Es werden zudem nur die im Rahmen dieses Projektes angepassten Konfigurationsparameter aufgelistet.
+In tabellarischer Form werden nachfolgend für jede Komponente seperat die angepassten Konfigurationsparameter aufgelistet und kurz hinsichtlich ihrer Funktion beschrieben.
+
+`/usr/local/etc/oai/mme.conf`
 
 | Eigenschaft | Bedeutung  |
 |-------------------------------|------------------------------------------------------|
 | REALM | Definiert den Domainbereich unter dem MME, HSS und S+P-GW ansprechbar sind. Wenn bei der Konfiguration des Hosts ein anderes Realm als `openair4G.eur` verwendet wurde, muss dieser Parameter entsprechend angepasst werden. |
 | GUMMEI_LIST | Konfiguriert die von der MME zur Verfügung gestellten GUMMEIs. Im Rahmen der Projektdurchführung wurden ein MCC von `001` und ein MNC von `93` verwendet. |
-| TAI_LIST | Konfiguriert den TAI der MME. Für den MCC und den MNC in der TAI_LIST wurden die selben Werte wie für dei GUMMEI_LIST verwendet. |
-| MME_INTERFACE_NAME_ FOR_S1_MME | Konfiguriert das für die S1-Signalisierung zu Verwendende Interface Hier muss das Netzwerkinterface eingetragen werden, über das die eNB erreicht werden kann. |
-| MME_IPV4_ADDRESS_ FOR_S1_MME | Definiert unter welcher IP-Adresse und Subnetzmaske die MME auf S1-Signalisierungsnachrichten reagiert. Unter Umständen muss hier die Subnetzmaske angepasst werden, sofern sich das Netzwerkgateway ändern sollte.
+| TAI_LIST | Konfiguriert den TAI der MME. Für den MCC und den MNC in der TAI_LIST wurden die selben Werte wie für die GUMMEI_LIST verwendet. |
+| MME_INTERFACE_NAME_ FOR_S1_MME | Konfiguriert das für die S1-Signalisierung zu verwendende Netzwerkinterface. Hier muss ein Netzwerkinterface eingetragen werden, über das die eNB erreicht werden kann. |
+| MME_IPV4_ADDRESS_ FOR_S1_MME | Definiert unter welcher IP-Adresse und Subnetzmaske die MME auf S1-Signalisierungsnachrichten reagiert. Unter Umständen muss hier die Subnetzmaske angepasst werden, sofern sich das Netzwerkgateway ändern sollte. |
 
-Als nächstes wird die Konfiguration der MME für das Diameter Protokoll unter `/usr/local/etc/oai/mme_fd.conf` angepasst.
+
+`/usr/local/etc/oai/mme_fd.conf`
+
 
 | Eigenschaft | Bedeutung |
 |-------------------------------|------------------------------------------------------|
 | Identity | Der Hostname unter dem die MME erreichbar ist. Dieser wurde von `yang.openair4G.eur` zu `hss.openair4G.eur` geändert.
-| Realm | Wie schon in der mme.conf, muss der Domainbreich nur angepasst werden, wenn nicht der Standard Domainbereich `openair4G.eur` verwendet wurde.
+| Realm | Der Domainbreich muss nur angepasst werden, wenn der Standarddomainbereich `openair4G.eur` nicht verwendet wurde.
 
 
+`/usr/local/etc/oai/hss.conf`
+
+| Eigenschaft | Bedeutung |
+|-------------------------------|------------------------------------------------------|
+| MySQL_user | Benutzername des Datenbanknutzers, der bei der Installation des MySQL-Servers angegeben wurde. |
+| MySQL_pass | Passwort des Benutzernamens. |
+| OPERATOR_key | Zeichenkette die zur dynamischen Generierung des SIM-Karten OPcs verwendet wird. Im Rahmen der Projektumsetzung wurde auf die dynamische Generierung verzichtet, da die zur Verfügung stehenden SIM-Karten mit einem festen OPc programmiert wurden. Dazu wurde der Wert auf Leerstring gesetzt. |
+
+`/usr/local/etc/oai/hss_fd.conf`
+
+| Eigenschaft | Bedeutung |
+|-------------------------------|------------------------------------------------------|
+| Identity | Der Hostname unter dem der HSS erreichbar ist. Hier entspricht der Standardwert dem im Projekt verwendeten Hostnamen `hss.openair4G.eur`. |
+| Realm | Der Domainbreich muss nur angepasst werden, wenn der Standarddomainbereich `openair4G.eur` nicht verwendet wurde. |
+
+`/usr/local/etc/oai/spgw.conf`
+
+| Eigenschaft | Bedeutung |
+|-------------------------------|------------------------------------------------------|
+| SGW_INTERFACE_NAME_ FOR_S1U_S12_S4_UP | Konfiguriert das für S1U-, S12- und S4-Signalisierungsnachrichten zu verwendende Netzwerkinterface. Hier muss ein Netzwerkinterface eingetragen werden, über das die eNB erreicht werden kann. |
+| SGW_IPV4_ADDRESS_ FOR_S1U_S12_S4_UP | Definiert unter welcher IP-Adresse und Subnetzmaske das S-GW auf Signalisierungsnachrichten reagiert. Unter Umständen muss hier die Subnetzmaske angepasst werden, sofern sich das Netzwerkgateway ändern sollte. |
+| PGW_INTERFACE_NAME_ FOR_SGI | Konfiguriert das für die Internetanbindung zu verwendende Netzwerkinterface. Hier muss ein Netzwerkinterface eingetragen werden, welches über Internetanbindung verfügt. | 
+| PGW_MASQUERADE_SGI | Über diesen Parameter kann konfiguriert werden, ob das P-GW Netzwerkadressübersetzung durchführt oder nicht. Der Standardwert ist `no`. Bei der Projektumsetzung wurde der Wert auf `yes` gesetzt. |
+| UE_TCP_MSS_CLAMPING | Über diesen Parameter kann konfiguriert werden, ob das P-GW die Anzahl der Bytes für Nutzerdaten maximieren soll oder nicht. Der Standardwert ist `no`. Bei der Projektumsetzung wurder der Wert auf `yes` gesetzt, da mit dem Standardwert keine Internetkommunikation möglich war. |
+| DEFAULT_DNS_IPV4_ ADDRESS | Konfiguriert den Standard DNS-Server, welcher den UE beim Verbindungsaufbau mit dem P-GW mitgeteilt wird. |
+| DEFAULT_DNS_SEC_ IPV4_ADDRESS | Konfiguriert den abgesicherten Standard DNS-Server, welcher den UE beim Verbindungsaufbau mit dem P-GW mitgeteilt wird. |
+
+
+Neben der zurvor getätigten Konfiguration des EPCs, müssen noch zwei Zertifikate für MME und HSS installiert werden. Mit Hilfe dieser beiden Zertifikate wird die S6a-Schnittstelle zwischen MME und HSS abgesichert. Zum installieren der Zertifikate wird in das `<openair-cn>/scripts`-Verzeichnis des EPC-Rootverzeichnisses gewechselt. Anschließend kann die Installation der Zertifikate wie folgt vorgenommen werden:
+
+```bash
+./check_hss_s6a_certificate /usr/local/etc/oai/freeDiameter/ hss.openair4G.eur
+./check_mme_s6a_certificate /usr/local/etc/oai/freeDiameter/ hss.openair4G.eur
+```
+
+Wurden MME und HSS auf seperaten Rechnern installiert oder ein anderer Hostname und/oder anderes Realm als `hss` beziehungsweise `openair4G.eur` verwendet, müssen oben stehende Kommandos entsprechend angepasst werden.
+
+Bevor nun mit der Installation des EPCs fortgefahren wird, muss unter `<openair-cn-dir>/src/common` die Header-Datei `common_types.h` angepasst werden. Denn hier befindet sich in ca. Zeile 88 ein Bug, durch den IMSI's mit zwei führenden Nullen nicht korrekt erkannt werden. Da im Rahmen des Projektes ein MCC von `001` verwendet wurde, musst die Datei entsprechend angepasst werden:
+
+```c
+// Quelle: https://gitlab.eurecom.fr/oai/openair-cn/commit/0d574905cbdedd30fdba7f6e3062db268761f0b7
+// #define IMSI_64_FMT              "%"SCNu64
+// Erkennt nun auch IMSI's der Struktur 001############
+#define IMSI_64_FMT              "%015"SCNu64
+``` 
+
+### Installation von HSS, MME und S+P-GW
+
+Nachdem der EPC der Anleitung gemäß konfiguriert wurde, können die einzelnen Komponenten der Reihe nach installiert werden. Dazu wird in das `<openair-cn>/scripts`-Verzeichnis gewechselt.
+
+Zuerst wird der HSS erneut kompiliert und anschließend gestartet. Beim erstmaligen Starten des HSS wird über den Parameter `i` ein SQL-Skript übergeben, dass das erforderliche Datenbankschema und einige IMSI-Einträge enthält.
+
+```bash
+./build_hss -c
+./run_hss -i ~/openair-cn/src/oai_hss/db/oai_db.sql  # Erstmaliges starten des HSS
+./run_hss
+```
+
+Bevor nun die MME installiert wird, muss in der gerade zuvor erstellten Datenbank `oai_db` der Hostname des EPC-Rechners eingetragen werden. Dazu wird über ein MySQL-Client in die Tabelle `mmeidentitiy` folgender Eintrag hinzugefügt:
+
+```sql
+INSERT INTO mmeidentity (`mmehost`, `mmerealm`, `UE-Reachability`)
+  VALUES ('hss.openair4G.eur', 'openair4G.eur', 0);
+```
+
+Wurden ein anderer Hostname oder Realm, wie im Rahmen des Projektes verwendet, muss obiges SQL-Statment entsprechend angepasst werden. Desweiteren empfiehlt es sich die ID des neu angelegten Eintrags zu merken, da dieser später beim Eintragen der SIM-Konfigurationen in die `users`-Tabelle als Fremdschlüssel benötigt wird.
 
 TODO ausformulieren
 
-- Git Repositories openair-cn auschecken (Wichtig develop branch)
-- Kernel > 4.7.x oai
-- hostname und etc/hosts konfigurieren
-- Konfigurationsdateien nach /usr/local/etc/oai kopieren
-- Zertifikate kopiert + installiert
 - installieren von hss,mme,spgw
 - in mmeidentity-Tabelle epc hostnamen 'hss.openair4G.eur' eintragen, Achtung ID merken
 - in users und pdn sim karte eintragen, außerdem in mmeidentity-Spalte (Fremdschlüssel auf mmeidentity-Tabelle) eintragen
