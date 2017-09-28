@@ -4,9 +4,9 @@ classoption: titlepage=firstiscover,BCOR=15mm
 title: |
   Projekt Mobile Systeme
 subtitle: |
-  Aufbau einer Internetverbindung von einem Huawei LTE-Stick über \
-  die eNodeB bis zur EPC mit Hilfe des OpenAirInterface. \
-  \includegraphics[]{img/lte.pdf}\
+  Aufbau eines LTE Netzes mit Hilfe des OpenAirInterface \
+  sowie die Bereitstellung einer Internetverbindung über ein Huawei LTE-Stick. \
+  \includegraphics[]{img/LTE.png}\
 
 author: René Zarwel, Fabian Uhlmann, Sebastian Frey, Michael Rödig
 
