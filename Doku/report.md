@@ -175,7 +175,20 @@ Nachdem die eNodeB erfolgreich installiert wurde, konnte sie für den Einsatz ko
 
 Bei den restlichen Konfigurationen haben die Standardwerte für dieses Projekt keinen Einfluss gehabt und werden daher nicht berücksichtigt. Die vollständige im Projekt verwendete Konfigurationsdatei befindet sich in der Anlage.
 
-Nachdem die eNodeB konfiguriert war, kann diese 
+### Aufbau und erster Start der eNodeB
+
+Nachdem die eNodeB konfiguriert war, konnte die USRP B210 mit dem System verbunden und gestartet werden. Hierzu wurde sie einfach mittels einer USB 3 Schnittstelle an den Rechner verbunden und mit folgendem Befehl gestartet:
+
+```sh
+cd cmake_targets/lte_build_oai/build
+sudo -E ./lte-softmodem -O $OPENAIR_DIR/targets\
+        /PROJECTS/GENERIC-LTE-EPC/CONF\
+        /enb.band7.tm1.usrpb210.conf -d
+```
+
+Das LTE-Softmodem stellt dabei die Steuerung der USRP da und bildet die Schnittstelle zum Kernnetz. Wie man sieht, wird die zuvor konfigurierte Datei an das LTE-Softmodem übergeben und damit richtig eingestellt. Der letzte Parameter `-d` ist nicht zwingend notwendig. Dieser startet parallel eine grafische Oberfläche zur Analyse der eNodeB und dessen Signale.
+
+Wenn die eNodeB richtig konfiguriert und angeschlossen ist, dann versucht diese sich mit dem Kernnetz, der EPC, zu verbinden. Wie diese aufgebaut und konfiguriert wurde, wird im folgenden Kapitel beschrieben.
 
 Evolved Packet Core (EPC) (Sebastian)
 -------------------------
