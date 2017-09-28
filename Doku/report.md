@@ -1,23 +1,26 @@
 Abkürzungsverzeichnis
 =====================
-Am Ende Alphabetisch sortieren!
 
-**LTE:** Long Term Evolution  
 **eNodeB/eNB:** Evolved Node B  
 **EPC:** Evolved Packet Core  
-**OAI:** Open Air Interface  
-**HSS:** Home Subscriber Server  
-**MME:** Mobility Management Entity  
-**S+P-GW:** Serving Gateway (S-GW) + PDN (Paket Data Network) Gateway (P-GW)  
-**3GPP:** 3rd Generation Partnership Project  
-**SDR:** Software Defined Radio  
 **EUTRAN:** Evolved UMTS Terrestrial Radio Access  
+**GUMMEI:** Globally Unique Mobile Management Entity Identifer  
+**HSS:** Home Subscriber Server  
+**LTE:** Long Term Evolution  
+**MME:** Mobility Management Entity  
+**OAI:** Open Air Interface  
+**OFDM:** Orthogonal Frequency Division Multiplexing  
+**SDR:** Software Defined Radio  
+**S+P-GW:** Serving Gateway (S-GW) + PDN (Paket Data Network) Gateway (P-GW)  
+**TAI:** Tracking Area Identity  
+**UE:** User Equipment  
 **UMTS:** Universal Mobile Telecommunications System  
 **OFDM:** Orthogonal Frequency Division Multiplexing  
 **UE:** User Equipment  
 **GUMMEI:** Globally Unique Mobile Management Entity Identifer  
 **TAI:** Tracking Area Identity  
 **USRP:** Universal Software Radio Peripheral 
+**3GPP:** 3rd Generation Partnership Project  
 
 Einleitung (Michael)
 ==========
