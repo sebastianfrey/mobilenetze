@@ -183,13 +183,13 @@ Nachdem die eNodeB konfiguriert war, kann diese
 Evolved Packet Core (EPC) (Sebastian)
 -------------------------
 
-Der EPC ist das zentrale Element des aufzubauenden LTE-Netzwerkes. Es setzt sich aus den drei Komponenten HSS, MME und SPGW zusammen. Dabei ist es möglich die einzelnen Komponenten des EPC auf verschiedenen Rechnern zu installieren. Im Rahmen dieses Projektes wurden der Einfachheit halber jedoch die EPC Komponenten auf einem Rechner installiert. Die einzelnen Schritte zur Installation und Integration des OAI EPC's werden in den Folgenden Abschnitten erörtert.
+Der EPC ist neben der eNodeB das zweite zentrale Element des aufzubauenden LTE-Netzwerkes. Es setzt sich aus den drei Komponenten HSS, MME und SPGW zusammen. Dabei ist es möglich die einzelnen Komponenten des EPC auf verschiedenen Rechnern zu installieren. Im Rahmen dieses Projektes wurden der Einfachheit halber jedoch die EPC Komponenten auf einem Rechner installiert. Die einzelnen Schritte zur Installation und Integration des OAI EPC's werden in den Folgenden Abschnitten erörtert.
 
 ### Konfiguration der Hardware/Software
 
-Als Betriebssystem für den EPC empfiehlt das OAI auf seiner Website Ubuntu 16.04 LTS (Xenial Xerus) auf einem physischen Rechner. Im Rahmen der Projektausführung wurde der EPC jedoch zuerst auf einer Virtuellen Maschine (VM) mit Ubuntu 14.04 LTS (Trusty Tahr) lauffähig installiert. Aufgrund eines Netzwerkproblems zwischen eNodeB-Rechner und der EPC-VM, wurde im weiteren Projektverlauf der EPC erneut auf einem physischen Rechner mit Ubuntu 16.04 LTS installiert. Verursacht wurde das Kommunikationsproblem durch den CiscoAnyConnect-VPN-Client auf dem eNodeB-Rechner, wodurch die beiden Komponenten nicht über das für die Signalisierung verwendete SCTP-Protokoll miteinander kommunizieren konnten. Dadurch war das Zusammenschließen von eNodeB und EPC nicht möglich.
+Als Betriebssystem für den EPC empfiehlt das OAI auf seiner Website Ubuntu 16.04 LTS (Xenial Xerus), welches auf einem physischen Rechner installiert werden sollte. Im Rahmen der Projektausführung wurde jedoch versucht den EPC zuerst auf einer Virtuellen Maschine (VM) mit Ubuntu 14.04 LTS (Trusty Tahr) zu installiert. Aufgrund eines Netzwerkproblems zwischen eNodeB-Rechner und der EPC-VM, wurde im weiteren Projektverlauf der EPC erneut auf einem physischen Rechner mit Ubuntu 16.04 LTS installiert. Verursacht wurde das Kommunikationsproblem durch den CiscoAnyConnect-VPN-Client auf dem eNodeB-Rechner, wodurch eNodeB und EPC nicht über das für die Signalisierung verwendete SCTP-Protokoll miteinander kommunizieren konnten. Dadurch war das Zusammenschließen von eNodeB und EPC nicht möglich. Deshalb wurde das EPC erneut auf einem physischen Rechner mit Ubuntu 16.04 LTS installiert.
 
-Nach der Installation von Ubuntu 16.04 auf dem physischen Rechner sollte zuerst zuerst ein Kernelupgrade auf die Version 4.7 oder größer durchgeführt werden. Wichtig beim Kernelupgrade ist, dass dieser das GTP (GPRS Transport Protool) Modul beinhaltet. Auf `gitlab.eurocom.fr` stellt das OAI ein optimiertes Kernelpacket, welches das GTP-Modul enthält, zum Download bereit. Im Rahmen des Projektes wurde der zum Zeitpunkt der Projektdurchführung aktuelle Master-Branch des OAI Git-Repositories verwendet.
+Nach der Installation von Ubuntu 16.04 LTS auf dem physischen Rechner, wurde zuerst ein Kernelupgrade auf die Version 4.7.7 durchgeführt. Wichtig beim Upgrade des Kernels ist, dass dieser das GTP (GPRS Transport Protool) Modul beinhaltet. Auf `gitlab.eurocom.fr` stellt das OAI ein optimiertes Kernelpaket, welches das GTP-Modul enthält, zum Download bereit. Im Rahmen des Projektes wurde der zum Zeitpunkt der Projektdurchführung aktuelle Master-Branch des Kernel Git-Repositories verwendet.
 
 Der Kernel wurde dann mit Folgenden Kommandos installiert:
 
@@ -203,15 +203,15 @@ sudo dpkg -i linux-headers-4.7.7-oaiepc_4.7.7-oaiepc-10.00.Custom_amd64.deb
 
 Mit dem Befehl `uname -r` lässt sich überprüfen ob die Kernelinstallation erfolgreich war oder nicht. Als Ausgabe in der Kommandzeile sollte hier `4.7.7-oaiepc` oder ähnlich erscheinen.
 
-Im nächsten Schritt gilt es den Hostnamen des Rechners anzupassen. Für den EPC-Rechner wurder der Hostname `hss` gewählt. Prinzipiell kann für den EPC-Rechner jeder beliebige Hostname verwendet werden. Im weiteren Verlauf dieses Dokuments wird jedoch angenommen, dass der Hostname des EPC-Rechners `hss` lautet.
+Im nächsten Schritt wurde der Hostnamen des Rechners angepasst. Für den EPC-Rechner wurder der Hostname `hss` gewählt. Prinzipiell kann für den EPC-Rechner jeder beliebige Hostname verwendet werden. Im weiteren Verlauf dieses Dokuments wird jedoch angenommen, dass der Hostname des EPC-Rechners `hss` lautet.
 
-Zuerst wird der Hostname mit nachfolgendem Befehl neu gesetzt.
+Zuerst wurde der Hostname mit nachfolgendem Befehl neu gesetzt.
 
 ```sh
 sudo hostname hss
 ```
 
-Anschließend muss noch die `/etc/hosts`-Datei angepasst werden. Wie schon beim Hostnamen kann das Realm beliebig gewählt werden. Im weiteren Verlauf dieses Dokuments wird jedoch ebenfalls angenommen, dass der Real des EPC-Rechners `openair4G.eur` lautet.
+Anschließend wurde noch die `/etc/hosts`-Datei angepasst. Wie schon der Hostnamen, kann das Realm beliebig gewählt werden. Im weiteren Verlauf dieses Dokuments wird jedoch angenommen, dass der Real des EPC-Rechners `openair4G.eur` lautet.
 
 ```sh
 sudo nano /etc/hosts
@@ -221,19 +221,19 @@ sudo nano /etc/hosts
 
 ```
 
-Nachdem dem Kernelupdate und dem Anpassen des Hostnames sowie der Hosts-Konfiguration, empfiehlt es sich den Rechner neu zu starten und die vorher getätigten Anpassungen noch einmal zu überprüfen. So kann es eventuell passieren, dass während dem Bootvorgang ein anderer Kernel als der zuvor installierte geladen wird. Dies lässt sich beheben in dem man beim Bootvorgang den korrekten Kernel manuell wählt. Damit nicht bei jedem Neustart des EPC-Rechners der Kernel manuell gewählt werden muss, empfiehlt es sich in der  `/etc/default/grub` Konfigurationsdatei den `GRUB_DEFAULT` Wert anzupassen. Null bedeutet, dass der Default Kernel geladen wird. Entweder wird der `GRUB_DEFAULT`-Wert auf den Index des beim Bootvorgang gewünschten Kernels oder auf den vollen Namen des Kernels, so wie er im Grub-Bootmenu angezeigt wird, gesetzt. Vorsicht vor Tippfehlern, denn die können dazu führen, dass der Rechner unter Umständen nicht mehr korrekt bootet.
+Nachdem dem Kernelupdate und dem Anpassen des Hostnames sowie der Hosts-Konfiguration, empfiehlt es sich den Rechner neu zu starten und die vorher getätigten Anpassungen noch einmal zu überprüfen. So kann es eventuell passieren, dass während dem Bootvorgang ein anderer Kernel, als der zuvor installierte, geladen wird. Dies lässt sich beheben in dem man beim Bootvorgang in Grub den korrekten Kernel manuell wählt. Damit nicht bei jedem Neustart des EPC-Rechners der Kernel manuell gewählt werden muss, empfiehlt es sich in der  `/etc/default/grub` Konfigurationsdatei den `GRUB_DEFAULT` Wert anzupassen. Der Wert `0` bedeutet, dass der Default Kernel geladen wird. Entweder wird der `GRUB_DEFAULT`-Wert auf den Index des beim Bootvorgang gewünschten Kernels oder auf den vollen Namen des Kernels, so wie er im Grub-Bootmenu angezeigt wird, gesetzt. Vorsicht vor Tippfehlern, denn die können dazu führen, dass der Rechner unter Umständen nicht mehr korrekt startet.
 
 ### EPC Installationsvorbereitungen
 
 Im Vorherigen Abschnitt wurde beschrieben, wie ein Rechner für die Installation des OAI-EPCs vorbreitet werden muss. In nachfolgendem Abschnitt wird angenommen, dass die Installation und Vorbereitung des Rechners nach der Anleitung im vorherigen Abschnitt durchgeführt wurde.
 
-Zuerst muss der Sourcecode für das EPC ausgecheckt werden.
+Zuerst wurde der Sourcecode für das EPC ausgecheckt.
 
 ```bash
 git clone https://gitlab.eurecom.fr/oai/openair-cn.git
 ```
 
-Nach erfoglreichem Download wird in das Verzeichnis `openair-cn` gewechselt und die Working Copy auf den `develop`-Branch aktualisiert.
+Nach erfoglreichem Download wurde in das Verzeichnis `openair-cn` gewechselt und die Working Copy auf den `develop`-Branch aktualisiert.
 
 ```bash
 cd openair-cn
@@ -244,20 +244,20 @@ git pull
 Mit `git status` lässt sich überprüfen ob die Working Copy tatsächlich auf dem aktuellsten Stand ist. Anschließend wird in das `<openair-cn>/scripts`-Verzeichnis gewechselt und nacheinander jede EPC-Komponente einzelnen kompiliert. Die Befehle zum Kompilieren der Komponenten sollten der Reihe nach und sperat ausgeführt werden.
 
 ```bash
-./build_mme -
+./build_mme -i
 ./build_hss -i
 ./build_spgw -i
 ```
 
 Während des Kompiliervorgangs der einzelnen Komponenten werden zusätzliche System Abhängigkeiten installiert. Hierbei muss interaktiv die Installation verschiedener Pakete zugelassen werden. Des Weiteren wird ein MySQL-Server, sofern nicht vorhanden, und phpMyAdmin als Datenbanktool installiert und eingerichtet. Ein Stolperstein bei der Installation von phpMyAdmin ist die korrekte Auswahl des Webservers im Installationsmenü vorzunehmen. Hier sollte darauf geachtet werden, dass der gewünschte Webserver für die Ausführung von phpMyAdmin durch ein vorangestellten roten Punkt gekennzeichnet ist.
 
-Nach erfolgreicher Installation von MME, HSS und S+P-GW kann noch überprüft werden ob der MySQL-Server und phpMyAdmin auf dem EPC-Rechner korrekt installiert wurden. Dazu navigiert man im Browser auf `http://localhost/phpmyadmin`.
+Nach erfolgreicher Installation von MME, HSS und S+P-GW kann noch überprüft werden ob der MySQL-Server und phpMyAdmin auf dem EPC-Rechner korrekt installiert wurden. Dazu navigiert man im Browser auf `http://localhost/phpmyadmin`. Erscheint hier die phpMyAdmin-Seite und man kann sich erfolgreich mit den beim Installationsvorgang vergebenen Credentials anmelden, war die Installation des MySQL-Servers erfolgreich.
 
 ### Konfiguration von HSS, MME und S+P-GW
 
-Da nun MME, HSS und S+P-GW erfolgreich installiert wurden, müsse die Konfigurationsdateien zu jeder Komponente angepasst werden. Dazu müssen die Standardtemplates der einzelnen Konfigurationen nach `/usr/local/etc/oai` kopieret werden. Außerdem muss das Verzeichnis `/usr/local/etc/oai/freeDiameter` erstellt werden.
+Nach der erfolgreichen Installation von MME, HSS und S+P-GW, wurden die Konfigurationsdateien jeder Komponente angepasst. Dazu wurden zuerst die Standardkonfigurationsvorlagen einer jeden Komponenten nach `/usr/local/etc/oai` kopiert. Außerdem wurde das Verzeichnis `/usr/local/etc/oai/freeDiameter` erstellt.
 
-Die Konfigurationsdateien können über folgende Befehele kopiert werden:
+Die Konfigurationsdateien wurden über folgende Befehele kopiert:
 
 ```bash
 sudo cp ~/openair-cn/etc/mme.conf /usr/local/etc/oai
@@ -318,7 +318,7 @@ In tabellarischer Form werden nachfolgend für jede Komponente seperat die angep
 | DEFAULT_DNS_SEC_ IPV4_ADDRESS | Konfiguriert den abgesicherten Standard DNS-Server, welcher den UE beim Verbindungsaufbau mit dem P-GW mitgeteilt wird. |
 
 
-Neben der zurvor getätigten Konfiguration des EPCs, müssen noch zwei Zertifikate für MME und HSS installiert werden. Mit Hilfe dieser beiden Zertifikate wird die S6a-Schnittstelle zwischen MME und HSS abgesichert. Zum installieren der Zertifikate wird in das `<openair-cn>/scripts`-Verzeichnis des EPC-Rootverzeichnisses gewechselt. Anschließend kann die Installation der Zertifikate wie folgt vorgenommen werden:
+Neben der zurvor getätigten Konfiguration des EPCs, wurden noch zwei Zertifikate für MME und HSS installiert. Mit Hilfe dieser beiden Zertifikate wird die S6a-Schnittstelle zwischen MME und HSS abgesichert. Zum installieren der Zertifikate wurde in das `<openair-cn>/scripts`-Verzeichnis gewechselt. Anschließend wurde die Installation der Zertifikate wie folgt vorgenommen:
 
 ```bash
 ./check_hss_s6a_certificate /usr/local/etc/oai/freeDiameter/ hss.openair4G.eur
@@ -327,7 +327,7 @@ Neben der zurvor getätigten Konfiguration des EPCs, müssen noch zwei Zertifika
 
 Wurden MME und HSS auf seperaten Rechnern installiert oder ein anderer Hostname und/oder anderes Realm als `hss` beziehungsweise `openair4G.eur` verwendet, müssen oben stehende Kommandos entsprechend angepasst werden.
 
-Bevor nun mit der Installation des EPCs fortgefahren wird, muss unter `<openair-cn-dir>/src/common` die Header-Datei `common_types.h` angepasst werden. Denn hier befindet sich in ca. Zeile 88 ein Bug, durch den IMSI's mit zwei führenden Nullen nicht korrekt erkannt werden. Da im Rahmen des Projektes ein MCC von `001` verwendet wurde, musst die Datei entsprechend angepasst werden:
+Bevor die Installation des EPCs fortgesetzt wurde, wurde unter `<openair-cn-dir>/src/common` die Header-Datei `common_types.h` angepasst. Denn hier befindet sich ungefähr in Zeile 88 ein Bug, durch den IMSI's mit zwei führenden Nullen nicht korrekt erkannt werden. Da im Rahmen des Projektes ein MCC von `001` verwendet wurde, musst die Datei entsprechend angepasst werden:
 
 ```c
 // Quelle: https://gitlab.eurecom.fr/oai/openair-cn/commit/0d574905cbdedd30fdba7f6e3062db268761f0b7
@@ -338,24 +338,40 @@ Bevor nun mit der Installation des EPCs fortgefahren wird, muss unter `<openair-
 
 ### Installation von HSS, MME und S+P-GW
 
-Nachdem der EPC der Anleitung gemäß konfiguriert wurde, können die einzelnen Komponenten der Reihe nach installiert werden. Dazu wird in das `<openair-cn>/scripts`-Verzeichnis gewechselt.
+Nachdem der EPC der Anleitung gemäß konfiguriert wurde, wurden die einzelnen Komponenten der Reihe nach installiert. Dazu wurde in das `<openair-cn>/scripts`-Verzeichnis gewechselt.
 
-Zuerst wird der HSS erneut kompiliert und anschließend gestartet. Beim erstmaligen Starten des HSS wird über den Parameter `i` ein SQL-Skript übergeben, dass das erforderliche Datenbankschema und einige IMSI-Einträge enthält.
+Zuerst wurde der HSS erneut kompiliert und anschließend gestartet. Beim erstmaligen Starten des HSS wurde über den Parameter `i` ein SQL-Skript übergeben, dass das erforderliche Datenbankschema und einige IMSI-Einträge enthält.
 
 ```bash
-./build_hss -c
+./build_hss -c # Muss nur dann aufgerufen werden, wenn der Sourcecode angepasst wurde.
 ./run_hss -i ~/openair-cn/src/oai_hss/db/oai_db.sql  # Erstmaliges starten des HSS
 ./run_hss
 ```
 
-Bevor nun die MME installiert wird, muss in der gerade zuvor erstellten Datenbank `oai_db` der Hostname des EPC-Rechners eingetragen werden. Dazu wird über ein MySQL-Client in die Tabelle `mmeidentitiy` folgender Eintrag hinzugefügt:
+Bevor die MME-Installation forgesetzt wurde, wurde in der zuvor erstellten Datenbank `oai_db` der Hostname des EPC-Rechners eingetragen. Dazu wurde über ein MySQL-Client zur Tabelle `mmeidentitiy` folgende Zeile hinzugefügt:
 
 ```sql
 INSERT INTO mmeidentity (`mmehost`, `mmerealm`, `UE-Reachability`)
   VALUES ('hss.openair4G.eur', 'openair4G.eur', 0);
 ```
 
-Wurden ein anderer Hostname oder Realm wie in dieser Projektumsetzung verwendet, muss obiges SQL-Statment entsprechend angepasst werden. Desweiteren empfiehlt es sich die ID des neu angelegten Eintrags zu merken, da dieser später beim Eintragen von SIM-Konfigurationen in die `users`-Tabelle als Fremdschlüssel-ID benötigt wird.
+Wird ein anderer Hostname oder Realm wie in dieser Projektumsetzung verwendet, muss obiges SQL-Statment entsprechend angepasst werden. Desweiteren empfiehlt es sich die ID des neu angelegten Eintrags zu merken, da dieser später beim Eintragen von SIM-Konfigurationen in die `users`-Tabelle als Fremdschlüssel-ID benötigt wird.
+
+Als nächstes wird die MME installiert. Dazu führt man folgende Befehle aus:
+
+```bash
+./build_mme -c # Muss nur dann aufgerufen werden, wenn der Sourcecode angepasst wurde.
+./run_mme
+```
+
+Nach erfolgreichem Start von HSS und MME, wurde in den Logs beider Komponenten die Nachricht `STATE_OPEN` angezeigt.
+
+Zum Schluss wird das S+P-GW installiert und gestartet. Dazu für man folgende Befehle aus:
+
+```bash
+./build_spgw -c # Muss nur dann aufgerufen werden, wenn der Sourcecode angepasst wurde.
+./run_spgw  
+```
 
 TODO ausformulieren
 
