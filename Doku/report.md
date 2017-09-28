@@ -259,7 +259,7 @@ INSERT INTO mmeidentity (`mmehost`, `mmerealm`, `UE-Reachability`)
   VALUES ('hss.openair4G.eur', 'openair4G.eur', 0);
 ```
 
-Wurden ein anderer Hostname oder Realm, wie im Rahmen des Projektes verwendet, muss obiges SQL-Statment entsprechend angepasst werden. Desweiteren empfiehlt es sich die ID des neu angelegten Eintrags zu merken, da dieser später beim Eintragen der SIM-Konfigurationen in die `users`-Tabelle als Fremdschlüssel benötigt wird.
+Wurden ein anderer Hostname oder Realm wie in dieser Projektumsetzung verwendet, muss obiges SQL-Statment entsprechend angepasst werden. Desweiteren empfiehlt es sich die ID des neu angelegten Eintrags zu merken, da dieser später beim Eintragen von SIM-Konfigurationen in die `users`-Tabelle als Fremdschlüssel-ID benötigt wird.
 
 TODO ausformulieren
 
