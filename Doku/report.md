@@ -14,9 +14,10 @@ Am Ende Alphabetisch sortieren!
 **EUTRAN:** Evolved UMTS Terrestrial Radio Access  
 **UMTS:** Universal Mobile Telecommunications System  
 **OFDM:** Orthogonal Frequency Division Multiplexing  
-**UE:** User Equipment
-**GUMMEI:** Globally Unique Mobile Management Entity Identifer
-**TAI:** Tracking Area Identity
+**UE:** User Equipment  
+**GUMMEI:** Globally Unique Mobile Management Entity Identifer  
+**TAI:** Tracking Area Identity  
+**USRP:** Universal Software Radio Peripheral 
 
 Einleitung (Michael)
 ==========
@@ -74,10 +75,37 @@ Der in diesem Projekt verwendete Versuchsaufbau ist der untenstehenden Abbildung
 Aufsetzen der Projektumgebung
 =============================
 
-Evolved Node B (eNodeB) (René)
------------------------
+In diesem Kapitel wird der Projektablauf beschrieben, was dem Aufbau, der Installation und Konfiguration des in dem vorhergehenden Kapitel beschriebenen Versuchsaufbaus entspricht. Besonders wird auf benötigte Komponenten und speziellen Konfigurationen eingegangen, die für die erfolgreiche Umsetzung essentiell gewesen sind.
+
+Als Vorlage zum Vorgehen wurde ein Tutorial von OAI herangezogen. [@oaicotsuetutorial] Dieses gibt bereits eine gute Hilfe zum Einstieg und beschreibt die wichtigsten Schritte zum Aufbau des Netzes (ohne Internetverbindung). Leider ist es in manchen Punkten etwas zu ungenau bzw. nicht vollständig, sodass tiefgründigere und nicht vom Tutorial beschriebene Konfigurationen nötig waren. Hauptsächlich lag dies an abweichenden Rahmenbedingungen, weshalb im folgenden der gesamte Ablauf beschrieben wird.
+
+Evolved Node B (eNodeB)
+-----------------------------
+
+Die eNodeB ist die Schnittstelle zwischen dem Kernnetz (EPC) und den Teilnehmergeräten (UEs). Es bildet eine Funkzelle, mit der einzelne UEs kommunizieren können und Daten von bzw. zum Kernnetz weitergeleitet werden. Der Aufbau besteht aus einem Universal Software Radio Peripheral (USRP) welches durch einen einen physischen Rechner betrieben wird. Der genaue Aufbau und die Konfiguration werden im folgenden Abschnitt beschrieben.
 
 ### Konfiguration der Hardware/Software
+
+Als Betriebssystem für die eNodeB wird vom OAI ein Ubuntu in der Version 14.04.3 mit low-latency Kernel 3.19 empfohlen, da dieses für die Tests der OAI herangezogen wird. Grundsätzlich können auch andere Distributionen verwendet werden. Hier gibt es jedoch keine Garantie, dass die Build-Skripte sich erwartungsgemäß verhalten. Aus diesem Grund wurde das vorgeschlagene Ubuntu installiert.
+
+Wichtig ist, dass das Betriebssystem auf einem physischen Rechner installiert wird und nicht auf einer virtuellen Maschine. Nur so kann die Echtzeitfähigkeit, welche durch den low-latency Kernel freigeschaltet wird, erreicht werden, die für die Kontrolle der USRP benötigt wird. Nachdem das Betriebssystem auf dem Rechner installiert wurde, muss somit noch der low-latency Kernel installiert werden. Dies lässt sich einfach durch den folgenden Befehl in der Kommandozeile erreichen:
+
+```sh
+  sudo apt-get install linux-image-3.19.0-61-lowlatency\
+   linux-headers-3.19.0-61-lowlatency
+```
+
+Damit diese Änderung einen Effekt hat, muss der Rechner neugestartet werden. Anschließend kann der Erfolg durch den Befehl `uname -a` überprüft werden. Hier sollte die Ausgabe folgende Meldung enthalten:
+
+```sh
+Linux [NAME] 3.19-lowlatency
+```
+
+
+
+
+
+
 SW = Ubuntu 14.4_03
 phy. PC mit USB 3
 Ettus SDR (B210)
