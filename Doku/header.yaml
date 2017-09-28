@@ -13,7 +13,7 @@ author: René Zarwel, Fabian Uhlmann, Sebastian Frey, Michael Rödig
 numbersections: true
 geometry: margin=1in
 bibliography: bibliography.bib
-csl: iso690-author-date-en.csl
+csl: iso690-numeric-cs.csl
 
 header-includes: |
   \usepackage[ngerman]{babel}
