@@ -373,11 +373,7 @@ Zum Schluss wird das S+P-GW installiert und gestartet. Dazu für man folgende Be
 ./run_spgw  
 ```
 
-TODO ausformulieren
-
-- installieren von hss,mme,spgw
-- in mmeidentity-Tabelle epc hostnamen 'hss.openair4G.eur' eintragen, Achtung ID merken
-- in users und pdn sim karte eintragen, außerdem in mmeidentity-Spalte (Fremdschlüssel auf mmeidentity-Tabelle) eintragen
+Nachdem alle EPC Komponenten störungsfrei liefen, wurde als nächstes die im vorherigen Kapitel installierte eNodeB gestartet und mit dem EPC verbunden. In den MME-Logs wurde dann angezeigt, dass eine eNodeB mit dem EPC verbunden ist.
 
 
 ### Betrieb von HSS, MME und S+P-GW
@@ -396,6 +392,8 @@ Herstellen einer Internetverbindung (René)
 
 Performance (Sebastian)
 ==========
+
+Um die Performance des aufgebauten LTE-Netzes zu testen, wurde mit Hilfe des [Telekom-Speedtest](http://speedtest.t-online.de/) Messungen mit verschiedenen Dämpfungen an der eNodeB durchgeführt. Das UE war dabei an einen dritten Rechner angeschlossen. UE und eNodeB wurden über SMA-Kabel verbunden, da zum Zeitpunkt der Projektdurchführung kein elektromagnetisch gedämmter Raum sowie entsprechend lizenzierte Frequenzspektren zur Verfügung standen.  
 
 Datenrate
 ---------
