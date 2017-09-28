@@ -388,7 +388,7 @@ Aufbau der Projektumgebung
 --------------------------
 LTE- Stick, eNB + EPC
 
-Herstellen einer Internetverbindung (René)
+Herstellen einer Internetverbindung
 ===================================
 
 Das 2. Ziel dieses Projektes war, eine Internetverbindung über das LTE Netz an die UE zu bringen. Da das SPGW die Schnittstelle zum Internet darstellt und von dem einen ins andere Netz übersetzt, musste diese angepasst werden. Hierzu musste im ersten Schritt das Netzwerk-Interface, an dem die Verbindung zum Internet besteht, in der SPGW eingetragen werden. Dies waren dabei die relevanten Parameter:
