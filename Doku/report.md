@@ -391,6 +391,35 @@ LTE- Stick, eNB + EPC
 Herstellen einer Internetverbindung (René)
 ===================================
 
+Das 2. Ziel dieses Projektes war, eine Internetverbindung über das LTE Netz an die UE zu bringen. Da das SPGW die Schnittstelle zum Internet darstellt und von dem einen ins andere Netz übersetzt, musste diese angepasst werden. Hierzu musste im ersten Schritt das Netzwerk-Interface, an dem die Verbindung zum Internet besteht, in der SPGW eingetragen werden. Dies waren dabei die relevanten Parameter:
+
+Konfigurationsdatei: `/usr/local/etc/oai/spgw.conf`
+
+| Eigenschaft | Wert | Bedeutung |
+|-------------------------------------|---------------|------------------------------|
+| **P-GW NETWORK_INTERFACES** |||
+| PGW_INTERFACE_NAME_FOR_SGI | wlan001 | Name des Interfaces über die eine Internetverbindung besteht. |
+| PGW_IPV4_ADDRESS_FOR_SGI | 10.0.158.10/24 | IP-Adressbereich des Interfaces über die eine Internetverbindung besteht. |
+| PGW_MASQUERADE_SGI | yes | Aktiviert die Übersetzung von internen IP-Adressen im LTE Netz auf IPs im externen Netz. (NAT) |
+| UE_TCP_MSS_CLAMPING | yes | Aktiviert die Abstimmung von max. Paketgrößen für Netze mit unterschiedlichen Maximum Transmission Units (MTUs). |
+||||
+| DEFAULT_DNS_IPV4_ADDRESS | 158.10.20.1 | DNS Server Adresse zur Auflösung von Domainnamen im IPv4 Bereich |
+| DEFAULT_DNS_SEC_IPV4_ADDRESS | 158.10.20.1 | DNS Server Adresse zur Auflösung von Domainnamen im IPv4 Bereich mit Authentizitäts- und Integritätsprüfung |
+
+An dieser Stelle sind mehrere Parameter sehr wichtig. Zu aller erst sei das Interface für die Verbindung zum Internet erwähnt. Im Versuchsaufbau war ursprünglich eine Internetverbindung vom internen Netz über ein mittels Cisco Client aufgebautes virtuell private Network (VPN) realisiert. Aus diesem Grund war zunächst der Parameter `PGW_INTERFACE_NAME_FOR_SGI` mit dem Wert `clsc001` gesetzt. Doch dies brachte leider ungewollte Nebeneffekte mit sich. Der Cisco Client hat standardmäßig die Einstellung, dass sämtliche Netzwerkrouten im System auf das eigene Interface umgeleitet werden. Mit dem Befehl `ip route show` kann man sich dieses Verhalten bei aktiviertem VPN anschauen und sieht wie folgt aus:
+
+``sh
+TODO: IP route show mit cisco
+``
+
+Hier ist zu erkennen, dass die Verbindungen für das `gtp` Interface vom `clsc001` Interface vorher abgegriffen werden und somit nicht zur SPGW gelangen. Dies ließ sich durch den Befehl `ping 176.0.0.1` schnell nachstellen, wobei die Verbindung von der UE zur SPGW getestet wurde. Um dieses Verhalten zu unterbinden, wurden die Routen mit dem `route add` Befehl versucht umzuschreiben. Leider brachte dieser Ansatz keinen Erfolg, da sich nicht alle Routen so umschreiben ließen, wie es benötigt wurde.
+
+Da das zuvor genannte Verhalten eine Besonderheit vom Cisco Client ist, wurde eine Alternative für eine Internetverbindung gesucht. Hier hat man sich für eine WLan Verbindung ins `eduroam` entschieden, welche mit einem einfachen WLan USB-Stick realisiert wurde. Anschließend bestand eine Verbindung von der UE zur SPGW trotz der aktiven Internetverbindung.
+
+Doch durch einen weiteren wichtigen Parameter konnte noch keine direkte Verbindung vom UE zum Internet erreicht werden. Mit dem standardmäßig deaktivierten Parameter `UE_TCP_MSS_CLAMPING` wird das Maximum Segment Size (MSS) Clamping aktiviert. Aufgrund der unterschiedlich konfigurierten Netze (intern, Internet) bestehen auch unterschiedliche Maximum Transport Units (MTUs). So müssen einzelnen Pakete, die zu groß für das eine Netz sind, fragmentiert oder sogar verworfen werden. Um dies zu verhindert, wird das MSS Clamping aktiviert. Dieses sorgt für eine Reduzierung der MSS beim Verbindungsaufbau auf einen für beide Netze passenden Wert.
+
+Mit der so erfolgten Konfiguration konnte das UE mit dem Internet erfolgreich verbunden werden und das 2. Ziel wurde erreicht.
+
 Performance (Sebastian)
 ==========
 
