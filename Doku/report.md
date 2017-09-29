@@ -394,8 +394,8 @@ Nachdem alle EPC Komponenten störungsfrei liefen, wurde als nächstes die im vo
 ### Betrieb von HSS, MME und S+P-GW
 
 
-User Equipment (UE) (Fabian)
--------------------
+User Equipment (UE) und SIM Karte (Fabian)
+---------------------------------
 Für die Umsetzung unseres LTE Projekts verwendeten wir ein handelsübliches User Equipment. Wir entschieden uns für den HUAWEI LTE Surfstick E3372.
 
 Hier ein Auszug zu der Spezifikation des Sticks.
@@ -452,8 +452,10 @@ Software & Mobilfunk:
 |		       |- LTE und UMTS Inter-RAT Verbindungsmobilität 		       |
 |		       |- LTE und GERAN inter-RAT Verbindungsmobilität wird unterstütz durch CCO(cell change order)|
 
-![HUAWEI LTE Surfstick E3372](img/huaweiE3372.png)
-
+\begin{center}
+\includegraphics[width=0.5\textwidth]{img/huaweiE3372.png}
+HUAWEI LTE Surfstick E3372
+\end{center}
 Eine Punkt der Spezifikationsbeschreibung des Sticks beinhaltet die automatisch Installation. Dies wird vermutlich in der Regel durch die Software des Sticks und den gängigen Betriebssystemen auch unterstützt. Im Projekt wurde jedoch Linux als Betriebssystem eingesetzt, wodurch die automatische Softwareinstalltion nicht funktionierte. Bei Linux muss man Surfsticks, die gleichzeitig auch als Speicherstick verwendet werden können, in den passenden Modus umschalten. Standardmäßig wird der E3372 als Massenspeichergerät erkannt. Dies kann durch folgendes Terminalkommando geprüft werden:
 
 ```bash
@@ -467,6 +469,35 @@ lsusb
 lsusb -vs  001:088
 
 ![Detailinformationen zum erkannten USB Gerät](img/lsusb_vs.png)
+
+Um den HUAWEI LTE Surfstick als Mobilfunkgerät verwenden zu können, muss ein Moduswechsel vom Modus Massenspeichergerät zum Modus Modem bzw. Netzwerkkarte stattfinden. Hierfür wird die Hersteller-ID sowie Produkt-ID des Gerätes benötigt. 
+
+Die Umsetzung des Moduswechsels ist nicht für jeden Mobilfunkstick gleich. Für den erfolgreichen Wechselprozess des E3372 wurde zunächst die `/etc/usb_modeswitch.conf` um die nachfolgenden Codezeilen erweitert.
+
+`#Huawei E353`
+
+`TargetVendor=0x12d1`
+
+`TargetProductList="1f01"`
+
+`HuaweiNewMode=1`
+
+`NoDriverLoading=1`
+
+Falls der LTE Stick an einer USB 3 Schnittstelle verwendet werden soll, dann sollte zur Sicherheit die StorageDelay Option in der gleichen Konfigurationsdatei aktiviert sein. Die dafür notwendigen Einstellungen sind bereits in der Konfigurationsdatei vorhanden, sind jedoch durch das \# Symbol deaktiviert.
+
+`#SetStorageDelay=4`
+
+Hinweis: Die Projekterfahrungen haben gezeigt, das der USB Stick an einer USB 2 Schnittstelle eher bzw. besser erkannt wird. Am USB 3 Port gab es oft Probleme mit der Erkennung des E3372 und der späteren Umstellung auf den Modem Modus.
+
+Nachdem die Vorbereitungen für den Moduswechsel abgeschlossen sind, wird nun der LTE Stick mit dem nachfolgenden Befehl vom Massenspeicher zum Modem
+
+```bash
+sudo usb_modeswitch -v 12d1 -p 1f01 -M '555342431234567800000000000000
+11062000000101000100000000000000'
+```
+
+Mit dem Parameter `v` wird die Hersteller ID (Vendor ID), mit `p` die Produkt ID und mit `M` der gewünschte Switch-Modus angegeben. Die Werte der ersten beiden Parameter sind eindeutig durch das Gerät vorgegeben. Der letztere ist stark abhängig vom Geräte Modell. Bei einem anderen HUAWEI LTE Stick war zum Beispiel der Wert des `M` Parameters *55534243123456780000000000000011062000000100000000000000000000*. Obwohl die beiden Werte sich nur an einer Stelle unterscheiden, war dies ausschlaggebend ob der Moduswechsel erfolgreich war oder nicht. 
 
 Aufbau der Projektumgebung
 --------------------------
