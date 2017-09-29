@@ -582,20 +582,29 @@ An- und Abmeldung (Attach/Deattach)
 
 Fazit und Ausblick
 ==================
-Was haben wir im Verlauf des Projekts gelernt:
-- Verständnis, wie zellulare Mobilfunknetze funktionieren und wie sich Daten dort übertragen lassen
+Zusammenfassend lässt sich festhalten, dass das vorliegende Projekt das Wissen sowie das Verständnis der Projektteilnehmer zu zellularen Mobilfunknetzen, speziell zu LTE, geschärft hat. Neben den einzelnen LTE-Komponenten sowie dessen Aufbau und Zusammenhänge wurde durch das Projekt auch verdeutlicht, wie sich Daten innerhalb eines LTE-Netzwerks übertragen lassen. Zusätzlich konnten zahlreiche Erfahrungen, positiv wie auch negativ, im Umgang mit dem OpenAirInterface (OAI) erworben werden.  
+Die Folgende Auflistung zeigt nochmals die drei unter Kapitel "Projektüberblick und Ziele" festgelegten und beschriebenen Stufen des Projekts sowie dessen Umsetzungsstand:
 
-Umsetzungsstand:
+- Stufe 1: Erledigt
+- Stufe 2: Erledigt
+- Stufe 3: Erste Performance-Tests durchgeführt, Ann- sowie Abmeldung auf Protokollebene via Wireshark mitgeschnitten und betrachtet
 
-| Stufe | Umsetzungsgrad | dabei aufgetretene Probleme |
-| :---- | :------------: | --------------------------: |
-| 1     |                |                             |
-| 2     |                |                             |
-| 3     |                |                             |
+Wie der Aufzählung zu entnehmen ist, konnte Stufe 3 nicht zur vollständigen Zufriedenheit des Projektteams umgesetzt werden, da prinzipiell tiefgreifendere Untersuchungen der Performance sowie auf Protokollebene möglich gewesen wären. Aufgrund zahlreicher Probleme, die unten auch nochmals stichpunktartig aufgeführt sind, verzögerte sich der Projektvortschritt, wurdurch am Ende die entsprechende Zeit dafür fehlte.
 
-Wie kann das vorliegende Projekt zukünftig genutzt/weiter verwendet bzw. erweitert werden?
+Während der Umsetzung aufgetretenen Probleme:
 
-Ausblick bezüglich des OpenAirInterface (siehe 5G)
+- Virtualisierung von EPC
+- LTE Stick unzureichend
+- Dämpfungsglieder Roulette
+- LTE Bänder
+- GPS-Clock
+- IMSIs mit zwei führenden Nullen
+- access_restriction (47) für Authentifizierung
+- Routing des Cisco AnyConnectClient
+- PGW_MASQUERADE_SGI
+
+Dennoch konnte erfolgreich ein komplettes LTE-Netzwerk mit Hifle des OpenAirInterface nachgebaut werden (Stufe 1). Dabei wurde neben der durchgehenden Verbindung vom User Equipment (UE) über die eNodeB bis ins Kernnetz (EPC) auch die Verbindung ins Internet erfolgreich realisiert (Stufe 2). Zusätzlich kann das Wissen sowie die jeweiligen Lösungen der oben gelisteten Probleme mit Hilfe der vorliegenden Doku in zukünftigen LTE-Projekten genutzt werden, um einen schnelleren Testaufbau zu realisieren. Durch dieses Vorwissen können künftig schneller tiefgreifendere Untersuchungen des LTE-Netzwerks durchgeführt werden.  
+Des Weiteren ist die Mission der OpenAirInterface Software Alliance (OSA), Software und Tools für die 5G Wireless Research und Produktentwicklung bereitzustellen. Dadurch kann das in diesem Projekt erarbeitete Wissen sowie das entstandene LTE-Testnetzwerk möglicher Weise auch für die zukünftige Forschung im 5G-Bereich genutzt werden.
 
 Anhang
 ======
