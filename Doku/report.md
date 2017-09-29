@@ -603,7 +603,7 @@ Die Dokumentation zum vorliegenden Projekt wurde, wie die nachfolgende Tabelle a
 | Einleitung | Michael Rödig |
 | Evolved Node B (eNodeB) | René Zarwel |
 | Evolved Packet Core (EPC) | Sebastian Frey |
-| User Equipment (UE) und SIM-Karte | Fabian Uhlmann |
+| User Equipment (UE) und SIM Karte | Fabian Uhlmann |
 | Herstellen einer Internetverbindung | René Zarwel |
 | Performance | Sebastian Frey |
 | Signalisierung | Fabian Uhlmann |
