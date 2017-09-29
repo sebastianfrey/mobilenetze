@@ -394,11 +394,11 @@ Nachdem alle EPC Komponenten störungsfrei liefen, wurde als nächstes die im vo
 ### Betrieb von HSS, MME und S+P-GW
 
 
-User Equipment (UE) und SIM Karte (Fabian)
----------------------------------
-Für die Umsetzung unseres LTE Projekts verwendeten wir ein handelsübliches User Equipment. Wir entschieden uns für den HUAWEI LTE Surfstick E3372.
+User Equipment (UE) und SIM Karten (Fabian)
+----------------------------------
+Für die Umsetzung unseres LTE Projekts verwendeten wir ein handelsübliches User Equipment. Wir entschieden uns für den HUAWEI LTE Surfstick E3372. Als SIM Karte verwendeten wir eine Open Cells SIM, die wir von Open Cells Project (https://open-cells.com/index.php/sim-cards/) geordert hatten. Der Vorteil von diesen Karten ist, dass diese jederzeit durch uns selbst umprogrammiert werden können. Bereits bei der  Bestellung konnten wir Open Cells alle Werte für die SIM Karten vorgeben, wodurch wir fertig konfigurierte SIM Karten zurück erhielten.
 
-Hier ein Auszug zu der Spezifikation des Sticks.
+Zunächst ein Auszug von den Spezifikationen des Sticks.
 
 Hardware:
 
@@ -411,13 +411,13 @@ Hardware:
 |		       |	          					       |
 | unterstüzte Frequenzen |- LTE FDD 800MHz (832MHz~862MHz(Uplink)/791MHz~821MHz(Downlink))|
 | 			 |- LTE FDD 1800MHz					       |
-| 			 |- LTE FDD 2600MHz (2500MHz~2570MHz(Uplink)/2620MHz~2690MHz(Downlink))|
-| 			 |- LTE FDD/WCDMA/HSPA+ (2100MHz (1920MHz~1980MHz(Uplink)/2110MHz~2170MHz(Downlink))|
-| 			 |- LTE FDD/WCDMA/HSPA+ (900MHz 880MHz~915MHz(Uplink)/925MHz~960MHz(Downlink))|
-| 			 |- GSM/GPRS/EDGE 850MHz (824MHz~849MHz(Uplink)/869MHz~894MHz(Downlink))|
-| 			 |- GSM/GPRS/EDGE 900MHz (880MHz~915MHz(Uplink)/925MHz~960MHz(Downlink))|
-| 			 |- GSM/GPRS/EDGE 1800MHz ((1710MHz~1785MHz(Uplink)/1805MHz~1880MHz(Downlink))|
-| 			 |- GSM/GPRS/EDGE 1900MHz (1850MHz~1910MHz(Uplink)/1930MHz~1990MHz(Downlink))|
+| 			 |- LTE FDD 2600MHz (2500MHz\~2570MHz(Uplink)/2620MHz\~2690MHz(Downlink))|
+| 			 |- LTE FDD/WCDMA/HSPA+ (2100MHz (1920MHz~1980MHz(Uplink)/2110MHz\~2170MHz(Downlink))|
+| 			 |- LTE FDD/WCDMA/HSPA+ (900MHz 880MHz\~915MHz(Uplink)/925MHz\~960MHz(Downlink))|
+| 			 |- GSM/GPRS/EDGE 850MHz (824MHz\~849MHz(Uplink)/869MHz\~894MHz(Downlink))|
+| 			 |- GSM/GPRS/EDGE 900MHz (880MHz\~915MHz(Uplink)/925MHz\~960MHz(Downlink))|
+| 			 |- GSM/GPRS/EDGE 1800MHz ((1710MHz\~1785MHz(Uplink)/1805MHz\~1880MHz(Downlink))|
+| 			 |- GSM/GPRS/EDGE 1900MHz (1850MHz\~1910MHz(Uplink)/1930MHz\~1990MHz(Downlink))|
 |		       |	          					       |
 | externe Schnittstellen |- USB 2.0 High Speed 					       |
 |		       |- SIM/USIM Karte       					       |
@@ -452,11 +452,13 @@ Software & Mobilfunk:
 |		       |- LTE und UMTS Inter-RAT Verbindungsmobilität 		       |
 |		       |- LTE und GERAN inter-RAT Verbindungsmobilität wird unterstütz durch CCO(cell change order)|
 
-\begin{center}
+\begin{figure}[htbp]
+\centering
 \includegraphics[width=0.5\textwidth]{img/huaweiE3372.png}
-HUAWEI LTE Surfstick E3372
-\end{center}
-Eine Punkt der Spezifikationsbeschreibung des Sticks beinhaltet die automatisch Installation. Dies wird vermutlich in der Regel durch die Software des Sticks und den gängigen Betriebssystemen auch unterstützt. Im Projekt wurde jedoch Linux als Betriebssystem eingesetzt, wodurch die automatische Softwareinstalltion nicht funktionierte. Bei Linux muss man Surfsticks, die gleichzeitig auch als Speicherstick verwendet werden können, in den passenden Modus umschalten. Standardmäßig wird der E3372 als Massenspeichergerät erkannt. Dies kann durch folgendes Terminalkommando geprüft werden:
+\caption{HUAWEI LTE Surfstick E3372}
+\end{figure}
+
+Ein Punkt der Spezifikationsbeschreibung des Sticks beinhaltet die automatisch Installation. Dies wird vermutlich in der Regel durch die Software des Sticks und den gängigen Betriebssystemen auch unterstützt. Im Projekt wurde jedoch Linux als Betriebssystem eingesetzt, wodurch die automatische Softwareinstalltion nicht funktionierte. Bei Linux müssen Surfsticks, die gleichzeitig auch als Speicherstick verwendet werden können, in den passenden Modus umgeschaltet werden. Standardmäßig wird der E3372 vom Linux Betriebssystem als Massenspeichergerät erkannt. Dies kann durch folgendes Terminalkommando geprüft werden:
 
 ```bash
 lsusb
@@ -467,10 +469,11 @@ lsusb
 Über die BUS und Geräte Nummer erhält man weitere detailierte Informationen wie z. B. Herstelle ID und Produkt ID zum erkannten USB Gerät.
 ```bash
 lsusb -vs  001:088
+```
 
 ![Detailinformationen zum erkannten USB Gerät](img/lsusb_vs.png)
 
-Um den HUAWEI LTE Surfstick als Mobilfunkgerät verwenden zu können, muss ein Moduswechsel vom Modus Massenspeichergerät zum Modus Modem bzw. Netzwerkkarte stattfinden. Hierfür wird die Hersteller-ID sowie Produkt-ID des Gerätes benötigt. 
+Um den HUAWEI LTE Surfstick als Mobilfunkgerät verwenden zu können, muss ein Moduswechsel vom Massenspeichergerät zum Modem bzw. zur Netzwerkkarte stattfinden. Hierfür wird die Hersteller-ID sowie Produkt-ID des Gerätes benötigt. 
 
 Die Umsetzung des Moduswechsels ist nicht für jeden Mobilfunkstick gleich. Für den erfolgreichen Wechselprozess des E3372 wurde zunächst die `/etc/usb_modeswitch.conf` um die nachfolgenden Codezeilen erweitert.
 
@@ -488,16 +491,56 @@ Falls der LTE Stick an einer USB 3 Schnittstelle verwendet werden soll, dann sol
 
 `#SetStorageDelay=4`
 
-Hinweis: Die Projekterfahrungen haben gezeigt, das der USB Stick an einer USB 2 Schnittstelle eher bzw. besser erkannt wird. Am USB 3 Port gab es oft Probleme mit der Erkennung des E3372 und der späteren Umstellung auf den Modem Modus.
+Hinweis: Die Projekterfahrungen haben gezeigt, das der USB Stick an einer USB 2 Schnittstelle eher bzw. besser erkannt wird. Am USB 3 Port gab es oft Probleme mit der Erkennung des E3372 und der späteren Umstellung auf den Modem Modus. 
 
-Nachdem die Vorbereitungen für den Moduswechsel abgeschlossen sind, wird nun der LTE Stick mit dem nachfolgenden Befehl vom Massenspeicher zum Modem
+Nachdem die Vorbereitungen für den Moduswechsel abgeschlossen sind und der LTE Stick vom System vollständig erkannt wurde, wird dieser durch einen Konsolenbefehl vom Massenspeicher zum Modem. Wichtig hierbei ist, dass der Stick richtig vom Betriebssystem erkannt wird. Teilweise wurde der Stick bereits über den `lsusb` Befehl aufgelistet, obwohl er noch nicht vollkommen betriebsbereit war. In unserem Fall erschien das Stick als Massenspeicher in der Symbolleiste und der Autostart der daraufbefindlichen Software wollte starten. Wird das nachfolgende Kommando vor der vollständigen Erkennung ausgeführt, so wechselt zwar der LTE Stick in den Modem Modus, erzeugt aber keine neue Netzwerkschnittstelle auf dem PC und funktioniert somit nicht richtig.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{img/autostart_lte-stick.png}
+\caption{LTE Stick als Massenspeicher}
+\end{figure}
 
 ```bash
-sudo usb_modeswitch -v 12d1 -p 1f01 -M '555342431234567800000000000000
-11062000000101000100000000000000'
+sudo usb_modeswitch -v 12d1 -p 1f01 -M '555342431234567800000000000000110620000
+00101000100000000000000'
 ```
+Mit dem Parameter `v` wird die Hersteller ID (Vendor ID), mit `p` die Produkt ID und mit `M` der gewünschte Switch-Modus angegeben. Die Werte der ersten beiden Parameter sind eindeutig durch das Gerät vorgegeben. Der letztere ist stark abhängig vom Geräte Modell. Bei einem anderen HUAWEI LTE Stick war zum Beispiel der Wert des `M` Parameters *55534243123456780000000000000011062000000100000000000000000000*. Obwohl die beiden Werte sich nur an einer Stelle unterscheiden, ist dies ausschlaggebend ob der Moduswechsel erfolgreich ist oder nicht. Auch die Anpassung der `/etc/usb_modeswitch.conf` Datei ist nicht bei jedem LTE Stick notwendig.
 
-Mit dem Parameter `v` wird die Hersteller ID (Vendor ID), mit `p` die Produkt ID und mit `M` der gewünschte Switch-Modus angegeben. Die Werte der ersten beiden Parameter sind eindeutig durch das Gerät vorgegeben. Der letztere ist stark abhängig vom Geräte Modell. Bei einem anderen HUAWEI LTE Stick war zum Beispiel der Wert des `M` Parameters *55534243123456780000000000000011062000000100000000000000000000*. Obwohl die beiden Werte sich nur an einer Stelle unterscheiden, war dies ausschlaggebend ob der Moduswechsel erfolgreich war oder nicht. 
+Ist der Moduswechsel erfolgreich gewesen, so erscheint zum einen auf der Konsole eine Meldung und zum anderen hat sich die Produkt ID geändert. Außerdem erzeugt der Stick, nach dem er in den Modem Modus gewechselt ist, ein neue Netzwerkschnittstelle auf dem PC.
+
+ \ ![LTE Stick im Modem Modus](img/modswitch_success.png)
+
+Neben dem Kommando `lsusb` zur Prüfung des LTE Stick Moduses kann auch der Befehl `dmesg -T` verwendet werden. Dieser zeigt die letzten Änderungen vom Kernel Ring Buffer an.
+
+`lsusb` Kommando:
+
+ \ ![`lsusb` Ausgabe: LTE Stick im Modem Modus](img/lsusb_modem.png)
+
+`dmesg -T` Kommandos:
+
+- Massenspeicher
+
+ \ ![`dmegs` Ausgabe: LTE Stick als Massenspeicher](img/dmesg_mass-storage.png)
+
+- Modem
+
+ \ ![`dmegs` Ausgabe: LTE Stick als Modem](img/dmesg_modem.png)
+
+Wird der Befehl `ifconfig` ausgeführt, dann ist zu erkennen, dass ein neues Interface hinzugekommen ist. Mittels des `dmesg` Kommandos war zu sehen, dass eine Umbenennung von *eth0* auf einen kryptischen langen Interfacenamen stattfand.  
+
+\ ![neues Netzwerkinterface](img/new_network_interface.png)
+
+Der letzter Indikator, dass die Umschaltung erfolgreich war, ist die Weboberfläche des LTE Sticks. Diese ist durch Eingabe von `http://192.168.8.1/html/home.html` im Browser dann erreichbar.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=1\textwidth]{img/webUI.png}
+\caption{Weboberfläche des HUAWEI LTE Surfstick E3372}
+\end{figure}
+ 
+
+
 
 Aufbau der Projektumgebung
 --------------------------
