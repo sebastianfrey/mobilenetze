@@ -465,6 +465,7 @@ lsusb
 Über die BUS und Geräte Nummer erhält man weitere detailierte Informationen wie z. B. Herstelle ID und Produkt ID zum erkannten USB Gerät.
 ```bash
 lsusb -vs  001:088
+```
 
 ![Detailinformationen zum erkannten USB Gerät](img/lsusb_vs.png)
 
@@ -492,15 +493,20 @@ Konfigurationsdatei: `/usr/local/etc/oai/spgw.conf`
 
 An dieser Stelle sind mehrere Parameter sehr wichtig. Zu aller erst sei das Interface für die Verbindung zum Internet erwähnt. Im Versuchsaufbau war ursprünglich eine Internetverbindung vom internen Netz über ein mittels Cisco Client aufgebautes virtuell private Network (VPN) realisiert. Aus diesem Grund war zunächst der Parameter `PGW_INTERFACE_NAME_FOR_SGI` mit dem Wert `clsc001` gesetzt. Doch dies brachte leider ungewollte Nebeneffekte mit sich. Der Cisco Client hat standardmäßig die Einstellung, dass sämtliche Netzwerkrouten im System auf das eigene Interface umgeleitet werden. Mit dem Befehl `ip route show` kann man sich dieses Verhalten bei aktiviertem VPN anschauen und sieht wie folgt aus:
 
-``sh
-TODO: IP route show mit cisco
-``
+\ ![Cisco VPN überschreibt alle Routen](img/Cisco_Route_Bug.png)
 
 Hier ist zu erkennen, dass die Verbindungen für das `gtp` Interface vom `clsc001` Interface vorher abgegriffen werden und somit nicht zur SPGW gelangen. Dies ließ sich durch den Befehl `ping 176.0.0.1` schnell nachstellen, wobei die Verbindung von der UE zur SPGW getestet wurde. Um dieses Verhalten zu unterbinden, wurden die Routen mit dem `route add` Befehl versucht umzuschreiben. Leider brachte dieser Ansatz keinen Erfolg, da sich nicht alle Routen so umschreiben ließen, wie es benötigt wurde.
 
-Da das zuvor genannte Verhalten eine Besonderheit vom Cisco Client ist, wurde eine Alternative für eine Internetverbindung gesucht. Hier hat man sich für eine WLan Verbindung ins `eduroam` entschieden, welche mit einem einfachen WLan USB-Stick realisiert wurde. Anschließend bestand eine Verbindung von der UE zur SPGW trotz der aktiven Internetverbindung.
+Da das zuvor genannte Verhalten eine Besonderheit vom Cisco Client ist, wurde eine Alternative für eine Internetverbindung gesucht. Hier hat man sich für eine WLan Verbindung ins `eduroam` entschieden, welche mit einem einfachen WLan USB-Stick realisiert wurde. Da am EPC Rechner nun 2 aktive Netzverbindungen anliegen und in der Regel das Kabelgebunden Ethernet Interface als Standard gesetzt ist, muss noch die Route zum WLan-Interface als Standard Route eingetragen werden. Dies kann mit folgendem Befehl erreicht werden:
 
-Doch durch einen weiteren wichtigen Parameter konnte noch keine direkte Verbindung vom UE zum Internet erreicht werden. Mit dem standardmäßig deaktivierten Parameter `UE_TCP_MSS_CLAMPING` wird das Maximum Segment Size (MSS) Clamping aktiviert. Aufgrund der unterschiedlich konfigurierten Netze (intern, Internet) bestehen auch unterschiedliche Maximum Transport Units (MTUs). So müssen einzelnen Pakete, die zu groß für das eine Netz sind, fragmentiert oder sogar verworfen werden. Um dies zu verhindert, wird das MSS Clamping aktiviert. Dieses sorgt für eine Reduzierung der MSS beim Verbindungsaufbau auf einen für beide Netze passenden Wert.
+```sh
+  sudo ip route change to default dev wlx801f02d7b243 via 10.158.79.254
+```
+
+Der erste wichtige Parameter ist an der Stelle der Interfacename vom WLan, was in diesem Fall `wlx801f02d7b243` ist. Und zusätzlich muss die eigene IP-Adresse am Interface angegeben werden, über die die Kommunikation raus geht. Das der Eintrag richtig gesetzt wurde, kann man mit dem Befehl `ip route show` nachschauen. Hier sollte als Standard an oberster Stelle das eben eingetragene WLan Interface stehen.
+Mit dieser Konfiguration bestand eine Verbindung von der UE zur SPGW und parallel eine aktive Internetverbindung am EPC Rechner.
+
+Doch durch einen weiteren wichtigen Parameter in der Konfiguration konnte noch keine direkte Verbindung vom UE zum Internet erreicht werden. Mit dem standardmäßig deaktivierten Parameter `UE_TCP_MSS_CLAMPING` wird das Maximum Segment Size (MSS) Clamping aktiviert. Aufgrund der unterschiedlich konfigurierten Netze (intern, Internet) bestehen auch unterschiedliche Maximum Transport Units (MTUs). So müssen einzelnen Pakete, die zu groß für das eine Netz sind, fragmentiert oder sogar verworfen werden. Um dies zu verhindert, wird das MSS Clamping aktiviert. Dieses sorgt für eine Reduzierung der MSS beim Verbindungsaufbau auf einen für beide Netze passenden Wert.
 
 Mit der so erfolgten Konfiguration konnte das UE mit dem Internet erfolgreich verbunden werden und das 2. Ziel wurde erreicht.
 
