@@ -196,7 +196,6 @@ Wenn die eNodeB richtig konfiguriert und angeschlossen ist, dann versucht diese 
 
 Evolved Packet Core (EPC)
 -------------------------
-[Frey]
 
 Der EPC ist neben der eNodeB das zweite zentrale Element des aufzubauenden LTE-Netzwerkes. Es setzt sich aus den drei Komponenten HSS, MME und SPGW zusammen. Dabei ist es möglich die einzelnen Komponenten des EPC auf verschiedenen Rechnern zu installieren. Im Rahmen dieses Projektes wurden der Einfachheit halber jedoch die EPC Komponenten auf einem Rechner installiert. Die einzelnen Schritte zur Installation und Integration des OAI EPC's werden in den Folgenden Abschnitten erörtert.
 
@@ -385,7 +384,7 @@ Zum Schluss wird das S+P-GW installiert und gestartet. Dazu für man folgende Be
 
 ```bash
 ./build_spgw -c # Muss nur dann aufgerufen werden, wenn der Sourcecode angepasst wurde.
-./run_spgw  
+./run_spgw
 ```
 
 Nachdem alle EPC Komponenten störungsfrei liefen, wurde als nächstes die im vorherigen Kapitel installierte eNodeB gestartet und mit dem EPC verbunden. In den MME-Logs wurde dann angezeigt, dass eine eNodeB mit dem EPC verbunden ist.
@@ -537,8 +536,6 @@ Mit der so erfolgten Konfiguration konnte das UE mit dem Internet erfolgreich ve
 
 Performance
 ==========
-
-[Frey]
 
 Datenrate und Latenz
 --------------------
