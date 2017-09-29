@@ -396,7 +396,77 @@ Nachdem alle EPC Komponenten störungsfrei liefen, wurde als nächstes die im vo
 
 User Equipment (UE) (Fabian)
 -------------------
-Huawei LTE-Stick
+Für die Umsetzung unseres LTE Projekts verwendeten wir ein handelsübliches User Equipment. Wir entschieden uns für den HUAWEI LTE Surfstick E3372.
+
+Hier ein Auszug zu der Spezifikation des Sticks.
+
+Hardware:
+
+| Thema | Eigenschaft |
+|-------------------------------|------------------------------------------------------|
+| technischer Standard |- LTE Rel 9						       |
+|		       |- WCDMA Rel ‘99 plus Rel 5 HSDPA, Rel 6 HSUPA, Rel 7	       |
+|		       |- HSPA+(cat 14), Rel 8 DC-HSPA+(cat 24)			       |
+|		       |- GSM/GPRS/EDGE Rel 99					       |
+|		       |	          					       |
+| unterstüzte Frequenzen |- LTE FDD 800MHz (832MHz~862MHz(Uplink)/791MHz~821MHz(Downlink))|
+| 			 |- LTE FDD 1800MHz					       |
+| 			 |- LTE FDD 2600MHz (2500MHz~2570MHz(Uplink)/2620MHz~2690MHz(Downlink))|
+| 			 |- LTE FDD/WCDMA/HSPA+ (2100MHz (1920MHz~1980MHz(Uplink)/2110MHz~2170MHz(Downlink))|
+| 			 |- LTE FDD/WCDMA/HSPA+ (900MHz 880MHz~915MHz(Uplink)/925MHz~960MHz(Downlink))|
+| 			 |- GSM/GPRS/EDGE 850MHz (824MHz~849MHz(Uplink)/869MHz~894MHz(Downlink))|
+| 			 |- GSM/GPRS/EDGE 900MHz (880MHz~915MHz(Uplink)/925MHz~960MHz(Downlink))|
+| 			 |- GSM/GPRS/EDGE 1800MHz ((1710MHz~1785MHz(Uplink)/1805MHz~1880MHz(Downlink))|
+| 			 |- GSM/GPRS/EDGE 1900MHz (1850MHz~1910MHz(Uplink)/1930MHz~1990MHz(Downlink))|
+|		       |	          					       |
+| externe Schnittstellen |- USB 2.0 High Speed 					       |
+|		       |- SIM/USIM Karte       					       |
+|		       |- microSD Kartenslot   					       |
+|		       |- 2 externe Antennenanschlüsse				       |
+|		       |	          					       |
+|statische Empfängerempfindlichkeit |- LTE FDD 2100/1800/2600)/900/800 MHz gemäß 3GPP TS 36.101(R9)|
+|		       |- WCDMA/HSPA/HSPA+ 2100/900MHz entspricht 3GPP TS 25.101(R8)     |
+|		       |- GSM/GPRS/EDGE 850/900/1800/1900MHz entspricht 3GPP TS 05.05 (R99)|
+
+Software & Mobilfunk:
+
+| Thema | Eigenschaft |
+|-------------------------------|------------------------------------------------------|
+|Basis Spezifikation   |- kein Driver notwendig					       |
+|		       |- WebUI	          					       |
+|		       |- automatisches Verbinden und Trennen			       |
+|		       |- automatische Installation				       |
+|		       |	          					       |
+|PIN Management	       |- Aktivierund und Deaktivierung der PIN 		       |
+|		       |- PIN ändern und sperren 				       |
+|		       |- PIN entsperren mit PUK				       |
+|		       |	          					       |
+|Netwerkverbindungssetup|- APN Management	         			       |
+|		       |- automatische sowie manuelle Netzsuswahl und Registrierung    |
+|		       |							       |
+|Übertragungstechnik    |- LTE 2*2 MIMO						       |
+|		       |							       |
+|Mobilfunk Management  |- LTE Intra-Frequenz Handover und Inter-Frequenz Handover      |
+|		       |- LTE und UMTS Inter-RAT Idle Mobilität		               |
+|		       |- LTE und GERAN Inter-RAT Idle Mobilität	               |
+|		       |- LTE und UMTS Inter-RAT Verbindungsmobilität 		       |
+|		       |- LTE und GERAN inter-RAT Verbindungsmobilität wird unterstütz durch CCO(cell change order)|
+
+![HUAWEI LTE Surfstick E3372](img/huaweiE3372.png)
+
+Eine Punkt der Spezifikationsbeschreibung des Sticks beinhaltet die automatisch Installation. Dies wird vermutlich in der Regel durch die Software des Sticks und den gängigen Betriebssystemen auch unterstützt. Im Projekt wurde jedoch Linux als Betriebssystem eingesetzt, wodurch die automatische Softwareinstalltion nicht funktionierte. Bei Linux muss man Surfsticks, die gleichzeitig auch als Speicherstick verwendet werden können, in den passenden Modus umschalten. Standardmäßig wird der E3372 als Massenspeichergerät erkannt. Dies kann durch folgendes Terminalkommando geprüft werden:
+
+```bash
+lsusb
+```
+
+![Übersicht verbundener USB Geräte](img/lsusb.png)
+
+Über die BUS und Geräte Nummer erhält man weitere detailierte Informationen wie z. B. Herstelle ID und Produkt ID zum erkannten USB Gerät.
+```bash
+lsusb -vs  001:088
+
+![Detailinformationen zum erkannten USB Gerät](img/lsusb_vs.png)
 
 Aufbau der Projektumgebung
 --------------------------
