@@ -22,7 +22,9 @@ Abkürzungsverzeichnis
 **TAI:** Tracking Area Identity  
 **USRP:** Universal Software Radio Peripheral 
 **3GPP:** 3rd Generation Partnership Project  
-
+**SIM:** Subscriber Identity Module
+**LAN:** Local Area Network
+**APN:** Access Point Name
 Einleitung
 ==========
 Die vorliegende Projektdokumentation ist Teil der Veranstaltung „Mobile Netze“ an der Fakultät für Informatik und Mathematik (FK 07) der Hochschule München im Sommersemester 2017. Das Projekt dient dabei der Vertiefung der im Vorlesungsanteil erworbenen Kenntnisse und Fähigkeiten durch praktisches Experimentieren mit mobiler Kommunikation. Im Fall dieses Projekts, geht es um das Verständnis für die grundlegenden Prinzipien von LTE-Netzwerken, sowie die Kenntnis und praktische Erfahrungen mit dort verwendeten Techniken und Standards.
@@ -389,10 +391,6 @@ Zum Schluss wird das S+P-GW installiert und gestartet. Dazu für man folgende Be
 
 Nachdem alle EPC Komponenten störungsfrei liefen, wurde als nächstes die im vorherigen Kapitel installierte eNodeB gestartet und mit dem EPC verbunden. In den MME-Logs wurde dann angezeigt, dass eine eNodeB mit dem EPC verbunden ist.
 
-
-### Betrieb von HSS, MME und S+P-GW
-
-
 User Equipment (UE) und SIM Karten (Fabian)
 ----------------------------------
 Für die Umsetzung unseres LTE Projekts verwendeten wir ein handelsübliches User Equipment. Wir entschieden uns für den HUAWEI LTE Surfstick E3372. Als SIM Karte verwendeten wir eine Open Cells SIM, die wir von Open Cells Project (https://open-cells.com/index.php/sim-cards/) geordert hatten. Der Vorteil von diesen Karten ist, dass diese jederzeit durch uns selbst umprogrammiert werden können. Bereits bei der  Bestellung konnten wir Open Cells alle Werte für die SIM Karten vorgeben, wodurch wir fertig konfigurierte SIM Karten zurück erhielten.
@@ -526,9 +524,9 @@ Neben dem Kommando `lsusb` zur Prüfung des LTE Stick Moduses kann auch der Befe
 
  \ ![`dmegs` Ausgabe: LTE Stick als Modem](img/dmesg_modem.png)
 
-Wird der Befehl `ifconfig` ausgeführt, dann ist zu erkennen, dass ein neues Interface hinzugekommen ist. Mittels des `dmesg` Kommandos war zu sehen, dass eine Umbenennung von *eth0* auf einen kryptischen langen Interfacenamen stattfand.  
+Wird der Befehl `ifconfig` ausgeführt, dann ist zu erkennen, dass ein neues Interface hinzugekommen ist. Mittels des `dmesg` Kommandos war zu sehen, dass eine Umbenennung von *eth0* auf einen kryptischen langen Interface Namen stattfand.  
 
-\ ![neues Netzwerkinterface](img/new_network_interface.png)
+ \ ![neues Netzwerkinterface](img/new_network_interface.png)
 
 Der letzter Indikator, dass die Umschaltung erfolgreich war, ist die Weboberfläche des LTE Sticks. Diese ist durch Eingabe von `http://192.168.8.1/html/home.html` im Browser dann erreichbar.
 
@@ -537,13 +535,93 @@ Der letzter Indikator, dass die Umschaltung erfolgreich war, ist die Weboberflä
 \includegraphics[width=1\textwidth]{img/webUI.png}
 \caption{Weboberfläche des HUAWEI LTE Surfstick E3372}
 \end{figure}
- 
-
-
 
 Aufbau der Projektumgebung
 --------------------------
-LTE- Stick, eNB + EPC
+Damit wir kein öffentliches LTE Netz stören, mussten wir alle Komponenten per Kabel miteinander verbinden. Gemäß nachfolgender Abbildung wurde das UE direkt an einem Band 7 Duplexer angeschlossen. Dieser ist wiederum mit der RX und TX Schittstelle des URSP B210, der die eNB darstellt, gekoppelt. Auf der URSP Emfangs- und Senderschnittstelle ist jeweils ein 20dB (50 Ohm) Dämpfungsglied aufgeschraubt. Das USRP hat mittels USB 3 eine Verbindung mit einem handelsüblichen PC. Dieser und ein weiterer Rechner, welcher später die EPC darstellen wird, haben die Möglichkeit per LAN miteinander zu kommunizieren. 
+
+ \ ![Projektaufbau](img/projektaufbau.jpg)
+
+Nachdem alle notwendigen Komponenten installiert, konfiguriert und miteinander verbunden wurden, wurden sie nun in Betrieb genommen. Dabei ist eine gewisse Reihenfolge zu beachten, außer beim UE. Dies ist unabhängig von allem anderen. 
+
+Als erstes muss der HSS mit dem Konsolenkommando ```./run_hss ``` gestartet  werden. Läuft das gestartet Skript ohne Probleme durch, so erscheint am Ende auf der Terminalausgabe *"Initializing s6a layer: Done"*.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=1\textwidth]{img/Start_HSS.png}
+\caption{Start HSS}
+\end{figure}
+
+Nach der HSS muss nun die MME starten. Dies erfolgt indem in die Konsole ```./run_mme``` eingegeben wird. Ist auch hier das zugehörige Skript erfolgreich durchgelaufen, dann ändert sich der Status der HSS von *"STATE_CLOSED" zu "STATE_OPEN"*. Die MME zeigt ebenfalls an, dass sie mit der HSS verbunden ist.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=1\textwidth]{img/MME_HSS_Start.png}
+\caption{Start MME}
+\end{figure}
+
+Als letztes aus dem EPC wird das S+PGW gestartet. Hierfür wird ```./run_spgw``` im Terminal eingegeben. Ähnlich wieder bei der HSS kommt nach vollständigem Durchlaufs des Skriptes eine Erfolgsmeldung - *"Initializing SPGW-APP task interface: DONE"*
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=1\textwidth]{img/SPGW_Start.png}
+\caption{Start SPGW}
+\end{figure}
+
+Für ein vollständiges LTE Mobilfunknetz fehlt noch eine funktionstüchtige eNB. Diese wird als letztes mit dem gewünschten Frequenzband in Betrieb genommen. Wir haben mit dem folgenden Kommando die eNB mit dem Frequenzband 7 (2,6 GHz) gestartet. 
+```bash
+sudo -E ./lte-softmodem -O $OPENAIR_DIR/targets/PROJECTS/GENERIC-LTE-EPC/CONF/
+enb.band7.tm1.usrpb210.conf
+``` 
+\newpage
+Nachdem die eNB läuft und sich erfolgreich mit der MME verbunden hat, wird dies durch die MME im Terminal oder im Log angezeigt. Ab diesem Zeitpunkt senden sich die eNB und MME in regelmäßigen Abständen *HEARTBEAT* Nachrichten zu, um somit zu überprüfen ob die Gegenseite noch erreichbar ist.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{img/MME_eNB_Start.png}
+\caption{Start eNB und Verbindung mit MME}
+\end{figure}
+
+Da jetzt alle Komponenten laufen und miteinander verbunden sind, haben wir ein funktionsfähiges LTE Netz geschaffen.
+Nun sind wir in der Lage ein UE, wo zuvor die zugehörigen Daten der SIM Karte in den HSS eingetragen wurden, mit dem Mobilfunknetz zu verbinden. In den nachfolgenden Bildern ist zu erkennen, wie sich das UE mit dem Netz verbindet. Genau wie bei der Verbindung zwischen eNB und MME, zeigt uns diese hier ebenfalls an, wenn ein UE sich erfolgreich verbunden oder getrennt hat.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{img/UE_eNB_Connect.png}
+\caption{Verbindung UE mit eNB}
+\end{figure}
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{img/UE_MME_HSS_Connect.png}
+\caption{Verbindung UE mit Mobilfunknetz}
+\end{figure}
+
+\newpage
+Neben der MME zeigt auch das eine erfolgreiche Verbindung mit dem Netz an. Damit das UE nun auch im Internet surfen kann, muss nur noch der richtige APN eingetragen sein.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{img/network_available.png}
+\caption{Verfügbares Mobilfunknetz}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{img/lte_apn.png}
+\caption{Verfügbares Mobilfunknetz}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{img/systeminfos.png}
+\caption{Systemeinstellung des LTE Sticks}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{img/connected.png}
+\caption{HUAWEI LTE Surfstick E3372 mit Mobilfunknetz verbunden}
+\end{figure}
 
 Herstellen einer Internetverbindung
 ===================================
@@ -617,10 +695,32 @@ Signalisierung (Fabian)
 
 Authentifizierung
 ----------
+Der nachfolgende Wireshark Dump zeigt einen erfolglosen Anmeldungsversucht eines UE am Mobilfunknetz. Das Problem hierbei war ein Security Capability Mismatch, d. h. es gibt keine Verschlüsselungsalgorithmen vom UE und der MME die zusammenpassen würden.
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{img/auth_miss-match.png}
+\caption{Authentifizierung fehlgeschlafen}
+\end{figure}
+
+\newpage
 An- und Abmeldung (Attach/Deattach)
 ----------
+Der erste Wireshark Dump zeigt wie ein UE sich erfolgreich mit dem Mobilfunknetz verbindet. Man sieht zunächst die Attach, Identity und Security Anfragen sowie die zugehörigen erfolgreiche Respons Nachrichten.
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{img/anmeldung.png}
+\caption{Erfolgreiche Anmeldund des UE am Mobilfunknetz}
+\end{figure}
+
+Dieser Wireshark Dump zeigt das erfolgreiche Abmeldeverfahren eines UE vom Mobilfunknetz.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{img/abmeldung.png}
+\caption{Erfolgreiche Abmeldung vom Mobilfunknetz}
+\end{figure}
 
 Fazit und Ausblick
 ==================
@@ -660,7 +760,8 @@ Die Dokumentation zum vorliegenden Projekt wurde, wie die nachfolgende Tabelle a
 | Einleitung | Michael Rödig |
 | Evolved Node B (eNodeB) | René Zarwel |
 | Evolved Packet Core (EPC) | Sebastian Frey |
-| User Equipment (UE) und SIM Karte | Fabian Uhlmann |
+| User Equipment (UE) und SIM Karten | Fabian Uhlmann |
+| Aufbau der Projektumgebung | Fabian Uhlmann |
 | Herstellen einer Internetverbindung | René Zarwel |
 | Performance | Sebastian Frey |
 | Signalisierung | Fabian Uhlmann |
