@@ -598,9 +598,19 @@ Anhang
 ======
 Arbeitsaufteilung
 -----------------
+Die praktische Arbeit wurde von allen Teammitgliedern gemeinsam und zu gleichen Anteilen erbracht.  
+Die Dokumentation zum vorliegenden Projekt wurde, wie die nachfolgende Tabelle aufzeigt, unter den Teammitgliedern aufgeteilt und von den jeweiligen Personen ausformuliert. Zudem wurde die Arbeit, aus Gründen der Qualitätssicherung, durch die jeweils anderen Teammitglieder gegengelesen und gegebenenfalls angepasst.
+
 | Gliederungspunkt | Name |
 | :--------------- | ---: |
-| a                | b    |
+| Einleitung | Michael Rödig |
+| Evolved Node B (eNodeB) | René Zarwel |
+| Evolved Packet Core (EPC) | Sebastian Frey |
+| User Equipment (UE) und SIM-Karte | Fabian Uhlmann |
+| Herstellen einer Internetverbindung | René Zarwel |
+| Performance | Sebastian Frey |
+| Signalisierung | Fabian Uhlmann |
+| Fazit und Ausblick | Michael Rödig |
 
 Bibliography
 ============
