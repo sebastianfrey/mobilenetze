@@ -23,7 +23,7 @@ Abkürzungsverzeichnis
 **USRP:** Universal Software Radio Peripheral 
 **3GPP:** 3rd Generation Partnership Project  
 
-Einleitung (Michael)
+Einleitung
 ==========
 Die vorliegende Projektdokumentation ist Teil der Veranstaltung „Mobile Netze“ an der Fakultät für Informatik und Mathematik (FK 07) der Hochschule München im Sommersemester 2017. Das Projekt dient dabei der Vertiefung der im Vorlesungsanteil erworbenen Kenntnisse und Fähigkeiten durch praktisches Experimentieren mit mobiler Kommunikation. Im Fall dieses Projekts, geht es um das Verständnis für die grundlegenden Prinzipien von LTE-Netzwerken, sowie die Kenntnis und praktische Erfahrungen mit dort verwendeten Techniken und Standards.
 
@@ -196,7 +196,6 @@ Wenn die eNodeB richtig konfiguriert und angeschlossen ist, dann versucht diese 
 
 Evolved Packet Core (EPC)
 -------------------------
-[Frey]
 
 Der EPC ist neben der eNodeB das zweite zentrale Element des aufzubauenden LTE-Netzwerkes. Es setzt sich aus den drei Komponenten HSS, MME und SPGW zusammen. Dabei ist es möglich die einzelnen Komponenten des EPC auf verschiedenen Rechnern zu installieren. Im Rahmen dieses Projektes wurden der Einfachheit halber jedoch die EPC Komponenten auf einem Rechner installiert. Die einzelnen Schritte zur Installation und Integration des OAI EPC's werden in den Folgenden Abschnitten erörtert.
 
@@ -385,7 +384,7 @@ Zum Schluss wird das S+P-GW installiert und gestartet. Dazu für man folgende Be
 
 ```bash
 ./build_spgw -c # Muss nur dann aufgerufen werden, wenn der Sourcecode angepasst wurde.
-./run_spgw  
+./run_spgw
 ```
 
 Nachdem alle EPC Komponenten störungsfrei liefen, wurde als nächstes die im vorherigen Kapitel installierte eNodeB gestartet und mit dem EPC verbunden. In den MME-Logs wurde dann angezeigt, dass eine eNodeB mit dem EPC verbunden ist.
@@ -564,24 +563,27 @@ Konfigurationsdatei: `/usr/local/etc/oai/spgw.conf`
 | DEFAULT_DNS_ IPV4_ADDRESS | 158.10.20.1 | DNS Server Adresse zur Auflösung von Domainnamen im IPv4 Bereich |
 | DEFAULT_DNS_SEC_ IPV4_ADDRESS | 158.10.20.1 | DNS Server Adresse zur Auflösung von Domainnamen im IPv4 Bereich mit Authentizitäts- und Integritätsprüfung |
 
-An dieser Stelle sind mehrere Parameter sehr wichtig. Zu aller erst sei das Interface für die Verbindung zum Internet erwähnt. Im Versuchsaufbau war ursprünglich eine Internetverbindung vom internen Netz über ein mittels Cisco Client aufgebautes virtuell private Network (VPN) realisiert. Aus diesem Grund war zunächst der Parameter `PGW_INTERFACE_NAME_FOR_SGI` mit dem Wert `clsc001` gesetzt. Doch dies brachte leider ungewollte Nebeneffekte mit sich. Der Cisco Client hat standardmäßig die Einstellung, dass sämtliche Netzwerkrouten im System auf das eigene Interface umgeleitet werden. Mit dem Befehl `ip route show` kann man sich dieses Verhalten bei aktiviertem VPN anschauen und sieht wie folgt aus:
+An dieser Stelle sind mehrere Parameter sehr wichtig. Zu aller erst sei das Interface für die Verbindung zum Internet erwähnt. Im Versuchsaufbau war ursprünglich eine Internetverbindung vom internen Netz über ein mittels Cisco Client aufgebautes virtuell private Network (VPN) realisiert. Aus diesem Grund war zunächst der Parameter `PGW_INTERFACE_NAME_FOR_SGI` mit dem Wert `cscotun0` gesetzt. Doch dies brachte leider ungewollte Nebeneffekte mit sich. Der Cisco Client hat standardmäßig die Einstellung, dass sämtliche Netzwerkrouten im System auf das eigene Interface umgeleitet werden. Mit dem Befehl `ip route show` kann man sich dieses Verhalten bei aktiviertem VPN anschauen und sieht wie folgt aus:
 
-``sh
-TODO: IP route show mit cisco
-``
+\ ![Cisco VPN überschreibt alle Routen](img/Cisco_Route_Bug.png)
 
-Hier ist zu erkennen, dass die Verbindungen für das `gtp` Interface vom `clsc001` Interface vorher abgegriffen werden und somit nicht zur SPGW gelangen. Dies ließ sich durch den Befehl `ping 176.0.0.1` schnell nachstellen, wobei die Verbindung von der UE zur SPGW getestet wurde. Um dieses Verhalten zu unterbinden, wurden die Routen mit dem `route add` Befehl versucht umzuschreiben. Leider brachte dieser Ansatz keinen Erfolg, da sich nicht alle Routen so umschreiben ließen, wie es benötigt wurde.
+Hier ist zu erkennen, dass die Verbindungen für das `gtp` Interface vom `cscotun0` Interface vorher abgegriffen werden und somit nicht zur SPGW gelangen. Dies ließ sich durch den Befehl `ping 176.0.0.1` schnell nachstellen, wobei die Verbindung von der UE zur SPGW getestet wurde. Um dieses Verhalten zu unterbinden, wurden die Routen mit dem `route add` Befehl versucht umzuschreiben. Leider brachte dieser Ansatz keinen Erfolg, da sich nicht alle Routen so umschreiben ließen, wie es benötigt wurde.
 
-Da das zuvor genannte Verhalten eine Besonderheit vom Cisco Client ist, wurde eine Alternative für eine Internetverbindung gesucht. Hier hat man sich für eine WLan Verbindung ins `eduroam` entschieden, welche mit einem einfachen WLan USB-Stick realisiert wurde. Anschließend bestand eine Verbindung von der UE zur SPGW trotz der aktiven Internetverbindung.
+Da das zuvor genannte Verhalten eine Besonderheit vom Cisco Client ist, wurde eine Alternative für eine Internetverbindung gesucht. Hier hat man sich für eine WLan Verbindung ins `eduroam` entschieden, welche mit einem einfachen WLan USB-Stick realisiert wurde. Da am EPC Rechner nun 2 aktive Netzverbindungen anliegen und in der Regel das Kabelgebunden Ethernet Interface als Standard gesetzt ist, muss noch die Route zum WLan-Interface als Standard Route eingetragen werden. Dies kann mit folgendem Befehl erreicht werden:
 
-Doch durch einen weiteren wichtigen Parameter konnte noch keine direkte Verbindung vom UE zum Internet erreicht werden. Mit dem standardmäßig deaktivierten Parameter `UE_TCP_MSS_CLAMPING` wird das Maximum Segment Size (MSS) Clamping aktiviert. Aufgrund der unterschiedlich konfigurierten Netze (intern, Internet) bestehen auch unterschiedliche Maximum Transport Units (MTUs). So müssen einzelnen Pakete, die zu groß für das eine Netz sind, fragmentiert oder sogar verworfen werden. Um dies zu verhindert, wird das MSS Clamping aktiviert. Dieses sorgt für eine Reduzierung der MSS beim Verbindungsaufbau auf einen für beide Netze passenden Wert.
+```sh
+  sudo ip route change to default dev wlx801f02d7b243 via 10.158.79.254
+```
+
+Der erste wichtige Parameter ist an der Stelle der Interfacename vom WLan, was in diesem Fall `wlx801f02d7b243` ist. Und zusätzlich muss die eigene IP-Adresse am Interface angegeben werden, über die die Kommunikation raus geht. Das der Eintrag richtig gesetzt wurde, kann man mit dem Befehl `ip route show` nachschauen. Hier sollte als Standard an oberster Stelle das eben eingetragene WLan Interface stehen.
+Mit dieser Konfiguration bestand eine Verbindung von der UE zur SPGW und parallel eine aktive Internetverbindung am EPC Rechner.
+
+Doch durch einen weiteren wichtigen Parameter in der Konfiguration konnte noch keine direkte Verbindung vom UE zum Internet erreicht werden. Mit dem standardmäßig deaktivierten Parameter `UE_TCP_MSS_CLAMPING` wird das Maximum Segment Size (MSS) Clamping aktiviert. Aufgrund der unterschiedlich konfigurierten Netze (intern, Internet) bestehen auch unterschiedliche Maximum Transport Units (MTUs). So müssen einzelnen Pakete, die zu groß für das eine Netz sind, fragmentiert oder sogar verworfen werden. Um dies zu verhindert, wird das MSS Clamping aktiviert. Dieses sorgt für eine Reduzierung der MSS beim Verbindungsaufbau auf einen für beide Netze passenden Wert.
 
 Mit der so erfolgten Konfiguration konnte das UE mit dem Internet erfolgreich verbunden werden und das 2. Ziel wurde erreicht.
 
 Performance
 ==========
-
-[Frey]
 
 Datenrate und Latenz
 --------------------
@@ -620,30 +622,49 @@ An- und Abmeldung (Attach/Deattach)
 ----------
 
 
-Fazit und Ausblick (Michael)
+Fazit und Ausblick
 ==================
-Was haben wir im Verlauf des Projekts gelernt:
-- Verständnis, wie zellulare Mobilfunknetze funktionieren und wie sich Daten dort übertragen lassen
+Zusammenfassend lässt sich festhalten, dass das vorliegende Projekt das Wissen sowie das Verständnis der Projektteilnehmer zu zellularen Mobilfunknetzen, speziell zu LTE, geschärft hat. Neben den einzelnen LTE-Komponenten sowie dessen Aufbau und Zusammenhänge wurde durch das Projekt auch verdeutlicht, wie sich Daten innerhalb eines LTE-Netzwerks übertragen lassen. Zusätzlich konnten zahlreiche Erfahrungen, positiv wie auch negativ, im Umgang mit dem OpenAirInterface (OAI) erworben werden.  
+Die Folgende Auflistung zeigt nochmals die drei unter Kapitel "Projektüberblick und Ziele" festgelegten und beschriebenen Stufen des Projekts sowie dessen Umsetzungsstand:
 
-Umsetzungsstand:
+- Stufe 1: Erledigt
+- Stufe 2: Erledigt
+- Stufe 3: Erste Performance-Tests durchgeführt, Ann- sowie Abmeldung auf Protokollebene via Wireshark mitgeschnitten und betrachtet
 
-| Stufe | Umsetzungsgrad | dabei aufgetretene Probleme |
-| :---- | :------------: | --------------------------: |
-| 1     |                |                             |
-| 2     |                |                             |
-| 3     |                |                             |
+Wie der Aufzählung zu entnehmen ist, konnte Stufe 3 nicht zur vollständigen Zufriedenheit des Projektteams umgesetzt werden, da prinzipiell tiefgreifendere Untersuchungen der Performance sowie auf Protokollebene möglich gewesen wären. Aufgrund zahlreicher Probleme, die unten auch nochmals stichpunktartig aufgeführt sind, verzögerte sich der Projektvortschritt, wurdurch am Ende die entsprechende Zeit dafür fehlte.
 
-Wie kann das vorliegende Projekt zukünftig genutzt/weiter verwendet bzw. erweitert werden?
+Während der Umsetzung aufgetretenen Probleme:
 
-Ausblick bezüglich des OpenAirInterface (siehe 5G)
+- Virtualisierung von EPC
+- LTE Stick unzureichend
+- Dämpfungsglieder Roulette
+- LTE Bänder
+- GPS-Clock
+- IMSIs mit zwei führenden Nullen
+- access_restriction (47) für Authentifizierung
+- Routing des Cisco AnyConnectClient
+- PGW_MASQUERADE_SGI
+
+Dennoch konnte erfolgreich ein komplettes LTE-Netzwerk mit Hifle des OpenAirInterface nachgebaut werden (Stufe 1). Dabei wurde neben der durchgehenden Verbindung vom User Equipment (UE) über die eNodeB bis ins Kernnetz (EPC) auch die Verbindung ins Internet erfolgreich realisiert (Stufe 2). Zusätzlich kann das Wissen sowie die jeweiligen Lösungen der oben gelisteten Probleme mit Hilfe der vorliegenden Doku in zukünftigen LTE-Projekten genutzt werden, um einen schnelleren Testaufbau zu realisieren. Durch dieses Vorwissen können künftig schneller tiefgreifendere Untersuchungen des LTE-Netzwerks durchgeführt werden.  
+Des Weiteren ist die Mission der OpenAirInterface Software Alliance (OSA), Software und Tools für die 5G Wireless Research und Produktentwicklung bereitzustellen. Dadurch kann das in diesem Projekt erarbeitete Wissen sowie das entstandene LTE-Testnetzwerk möglicher Weise auch für die zukünftige Forschung im 5G-Bereich genutzt werden.
 
 Anhang
 ======
 Arbeitsaufteilung
 -----------------
+Die praktische Arbeit wurde von allen Teammitgliedern gemeinsam und zu gleichen Anteilen erbracht.  
+Die Dokumentation zum vorliegenden Projekt wurde, wie die nachfolgende Tabelle aufzeigt, unter den Teammitgliedern aufgeteilt und von den jeweiligen Personen ausformuliert. Zudem wurde die Arbeit, aus Gründen der Qualitätssicherung, durch die jeweils anderen Teammitglieder gegengelesen und gegebenenfalls angepasst.
+
 | Gliederungspunkt | Name |
 | :--------------- | ---: |
-| a                | b    |
+| Einleitung | Michael Rödig |
+| Evolved Node B (eNodeB) | René Zarwel |
+| Evolved Packet Core (EPC) | Sebastian Frey |
+| User Equipment (UE) und SIM Karte | Fabian Uhlmann |
+| Herstellen einer Internetverbindung | René Zarwel |
+| Performance | Sebastian Frey |
+| Signalisierung | Fabian Uhlmann |
+| Fazit und Ausblick | Michael Rödig |
 
 Bibliography
 ============
